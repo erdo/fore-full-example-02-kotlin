@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<foo.bar.example.fore.fullapp02.ui.common.widget.BadgeView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/common_space_small"
+    android:paddingRight="@dimen/common_space_medium_large"
+    android:paddingEnd="@dimen/common_space_medium_large">
+
+    <TextView
+        android:id="@+id/navigation_badge_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center"
+        android:minWidth="@dimen/nav_badge_minwidth"
+        android:background="@drawable/navigation_badge"
+        android:padding="@dimen/common_space_tiny"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/common_textsize_small" />
+
+</foo.bar.example.fore.fullapp02.ui.common.widget.BadgeView>

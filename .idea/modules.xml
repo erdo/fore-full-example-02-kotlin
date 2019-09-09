@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Full 02 Example.iml" filepath="$PROJECT_DIR$/Full 02 Example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/early.co-fore-full-example-02-kotlin-Full 02 Example.iml" filepath="$PROJECT_DIR$/early.co-fore-full-example-02-kotlin-Full 02 Example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fore-full-example-02-kotlin-Full 02 Example.iml" filepath="$PROJECT_DIR$/fore-full-example-02-kotlin-Full 02 Example.iml" />
+    </modules>
+  </component>
+</project>

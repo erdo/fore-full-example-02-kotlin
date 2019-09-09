@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<foo.bar.example.fore.fullapp02.ui.fruitcollector.FruitCollectorView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorLightGrey">
+
+    <LinearLayout
+        android:id="@+id/fruit_busycontainer_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingTop="@dimen/common_space_medium"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:id="@+id/fruit_citrus1_switch_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fruit_nocitrus" />
+
+                <Switch
+                    android:id="@+id/fruit_citrus1_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/fruit_go1_button"
+                style="@style/AppButtonPositive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fruit_citrus1_switch_container"
+                android:layout_centerHorizontal="true"
+                android:text="@string/fruit_go" />
+
+            <ProgressBar
+                android:id="@+id/fruit_busy1_prog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fruit_citrus1_switch_container"
+                android:layout_centerHorizontal="true"
+                android:indeterminate="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:id="@+id/fruit_citrus2_switch_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fruit_nocitrus" />
+
+                <Switch
+                    android:id="@+id/fruit_citrus2_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/fruit_go2_button"
+                style="@style/AppButtonPositive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fruit_citrus2_switch_container"
+                android:layout_centerHorizontal="true"
+                android:text="@string/fruit_go" />
+
+            <ProgressBar
+                android:id="@+id/fruit_busy2_prog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fruit_citrus2_switch_container"
+                android:layout_centerHorizontal="true"
+                android:indeterminate="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:id="@+id/fruit_citrus3_switch_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fruit_nocitrus" />
+
+                <Switch
+                    android:id="@+id/fruit_citrus3_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/fruit_go3_button"
+                style="@style/AppButtonPositive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fruit_citrus3_switch_container"
+                android:layout_centerHorizontal="true"
+                android:text="@string/fruit_go" />
+
+            <ProgressBar
+                android:id="@+id/fruit_busy3_prog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fruit_citrus3_switch_container"
+                android:layout_centerHorizontal="true"
+                android:indeterminate="true" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/fruit_fetchingfruitmessage_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fruit_busycontainer_linear"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/common_textsize_medium"
+        android:textStyle="bold"
+        android:padding="@dimen/common_space_small"
+        android:text="@string/fruit_fetchingfruit" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fruit_list_recycleview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/fruit_clear_button"
+        android:layout_below="@+id/fruit_fetchingfruitmessage_txt"
+        android:background="@color/colorAccent"
+        android:layout_margin="@dimen/common_space_medium"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false" />
+
+    <Button
+        android:id="@+id/fruit_clear_button"
+        style="@style/AppButtonNegative"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/fruit_clear" />
+
+    <LinearLayout
+        android:id="@+id/fruit_totalcitruscontainer_linear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/fruit_totalcontainer_linear"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal"
+        android:paddingRight="@dimen/common_space_medium">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fruit_citruscount" />
+
+        <TextView
+            android:id="@+id/fruit_totalcitruscount_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fruit_totalcontainer_linear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal"
+        android:padding="@dimen/common_space_medium">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fruit_totalcount" />
+
+        <TextView
+            android:id="@+id/fruit_totalcount_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</foo.bar.example.fore.fullapp02.ui.fruitcollector.FruitCollectorView>
+

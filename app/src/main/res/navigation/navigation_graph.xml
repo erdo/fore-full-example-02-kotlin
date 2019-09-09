@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_fruit">
+
+    <activity
+        android:id="@+id/navigation_mainActivity"
+        android:name="foo.bar.example.fore.fullapp02.ui.main.MainActivity"
+        android:label="MainActivity" />
+
+    <fragment
+        android:id="@+id/navigation_fruit"
+        android:name="foo.bar.example.fore.fullapp02.ui.fruitcollector.FruitCollectorFragment"
+        android:label="@string/title_fruit_fragment"
+        tools:layout="@layout/fragment_fruitcollector" />
+
+    <fragment
+        android:id="@+id/navigation_basket"
+        android:name="foo.bar.example.fore.fullapp02.ui.basket.BasketFragment"
+        android:label="@string/title_basket_fragment"
+        tools:layout="@layout/fragment_basket" />
+
+    <fragment
+        android:id="@+id/navigation_todo"
+        android:name="foo.bar.example.fore.fullapp02.ui.todolist.TodoListFragment"
+        android:label="@string/title_todo_fragment"
+        tools:layout="@layout/fragment_todolist" />
+
+    <activity
+        android:id="@+id/navigation_login"
+        android:name="foo.bar.example.fore.fullapp02.ui.login.LoginActivity"
+        android:label="LoginActivity" />
+
+</navigation>

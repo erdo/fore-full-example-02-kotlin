@@ -1,0 +1,46 @@
+package foo.bar.example.fore.fullapp02.api
+
+import co.early.fore.core.Affirm
+import co.early.fore.core.logging.Logger
+import foo.bar.example.fore.fullapp02.BuildConfig
+import okhttp3.Interceptor
+import okhttp3.Response
+import java.io.IOException
+
+/**
+ * This will be specific to your own app.
+ *
+ * Typically you would construct this class with some kind of Session object or similar that
+ * you would use to customize the headers according to the logged in status of the user, for example
+ */
+class CustomGlobalRequestInterceptor
+//private final Session session;
+
+    (logger: Logger) : Interceptor {
+
+    private val logger: Logger
+
+    init {
+        this.logger = Affirm.notNull(logger)
+    }
+
+
+    @Throws(IOException::class)
+    override fun intercept(chain: Interceptor.Chain): Response {
+
+        val original = chain.request()
+
+        val requestBuilder = original.newBuilder()
+
+
+        requestBuilder.addHeader("content-type", "application/json")
+        //requestBuilder.addHeader("X-MyApp-Auth-Token", !session.hasSession() ? "expired" : session.getSessionToken());
+        requestBuilder.addHeader("User-Agent", "fore-example-user-agent-" + BuildConfig.VERSION_NAME)
+
+
+        requestBuilder.method(original.method(), original.body())
+
+        return chain.proceed(requestBuilder.build())
+    }
+
+}
