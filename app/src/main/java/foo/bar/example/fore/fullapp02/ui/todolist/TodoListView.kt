@@ -17,6 +17,7 @@ import foo.bar.example.fore.fullapp02.feature.todolist.TodoItem
 import foo.bar.example.fore.fullapp02.feature.todolist.TodoListModel
 import foo.bar.example.fore.fullapp02.ui.common.uiutils.SyncerTextWatcher
 import kotlinx.android.synthetic.main.fragment_todolist.view.*
+import org.koin.android.ext.android.inject
 
 
 /**
@@ -30,19 +31,18 @@ class TodoListView @JvmOverloads constructor(
     RelativeLayout(context, attrs, defStyleAttr), SyncableView {
 
     //models that we need
-    private lateinit var todoListModel: TodoListModel
-    private lateinit var keyboard: InputMethodManager
-    private lateinit var logger: Logger
-
+    private val todoListModel: TodoListModel by App.inst.inject()
+    private val logger: Logger by App.inst.inject()
 
     private lateinit var todoListAdapter: TodoListAdapter
     private lateinit var animationSet: AnimatorSet
+    private lateinit var keyboard: InputMethodManager
 
 
     override fun onFinishInflate() {
         super.onFinishInflate()
 
-        getModelReferences()
+        keyboard = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         setupClickListeners()
 
@@ -51,11 +51,6 @@ class TodoListView @JvmOverloads constructor(
         setupAnimations()
     }
 
-    private fun getModelReferences() {
-        todoListModel = App.inst.appComponent.todoListModel
-        keyboard = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        logger = App.inst.appComponent.logger
-    }
 
     private fun setupClickListeners() {
 

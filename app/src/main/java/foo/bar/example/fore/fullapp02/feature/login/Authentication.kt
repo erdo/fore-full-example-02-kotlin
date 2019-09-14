@@ -11,8 +11,6 @@ import foo.bar.example.fore.fullapp02.api.authentication.AuthenticationService
 import foo.bar.example.fore.fullapp02.api.authentication.SessionRequestPojo
 import foo.bar.example.fore.fullapp02.api.authentication.SessionResponsePojo
 import foo.bar.example.fore.fullapp02.message.UserMessage
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * All the unit testable logic and data for Authentication,
@@ -20,8 +18,7 @@ import javax.inject.Singleton
  *
  * (this class knows nothing about views, contexts, nor anything to do with the android)
  */
-@Singleton
-class Authentication @Inject constructor(
+class Authentication (
     private val authenticationService: AuthenticationService,
     private val callProcessor: CallProcessor<UserMessage>,
     private val workMode: WorkMode,

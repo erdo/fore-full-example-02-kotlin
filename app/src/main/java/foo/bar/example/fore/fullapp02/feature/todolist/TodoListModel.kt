@@ -10,16 +10,13 @@ import co.early.fore.core.logging.Logger
 import co.early.fore.core.observer.ObservableImp
 import co.early.fore.core.time.SystemTimeWrapper
 import java.util.*
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * All the unit testable logic and data for our todolist
  *
  * (this class knows nothing about views, contexts, nor anything else to do with the android)
  */
-@Singleton
-class TodoListModel @Inject constructor(systemTimeWrapper: SystemTimeWrapper, logger: Logger) : ObservableImp(WorkMode.SYNCHRONOUS, logger),
+class TodoListModel (systemTimeWrapper: SystemTimeWrapper, logger: Logger) : ObservableImp(WorkMode.SYNCHRONOUS, logger),
                                                                             Updateable {
 
     private val todoList: MutableList<TodoItem>

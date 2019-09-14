@@ -8,10 +8,12 @@ import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import co.early.fore.lifecycle.LifecycleSyncer
 import co.early.fore.lifecycle.activity.SyncableAppCompatActivity
-import foo.bar.example.fore.fullapp02.App
 import foo.bar.example.fore.fullapp02.R
+import foo.bar.example.fore.fullapp02.feature.fruitcollector.FruitCollectorModel
 import foo.bar.example.fore.fullapp02.feature.login.Authentication
+import foo.bar.example.fore.fullapp02.feature.todolist.TodoListModel
 import foo.bar.example.fore.fullapp02.ui.login.LoginActivity
+import org.koin.android.ext.android.inject
 
 
 /**
@@ -23,12 +25,12 @@ import foo.bar.example.fore.fullapp02.ui.login.LoginActivity
  */
 class MainActivity : SyncableAppCompatActivity() {
 
-    private lateinit var authentication: Authentication
+    private val authentication: Authentication by inject()
+    private val todoListModel: TodoListModel by inject()
+    private val fruitCollectorModel: FruitCollectorModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        authentication = App.inst.appComponent.authentication
 
         setupNavigation(savedInstanceState)
     }
@@ -87,8 +89,8 @@ class MainActivity : SyncableAppCompatActivity() {
 
     override fun getThingsToObserve(): LifecycleSyncer.Observables {
         return LifecycleSyncer.Observables(
-            App.inst.appComponent.fruitCollectorModel,
-            App.inst.appComponent.todoListModel
+            fruitCollectorModel,
+            todoListModel
             // note that we are not observing the basket model as it has been implemented
             // as a locally scoped model that doesn't exist when we are not on the basket view
         )

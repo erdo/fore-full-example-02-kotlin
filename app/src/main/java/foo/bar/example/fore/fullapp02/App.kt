@@ -1,6 +1,9 @@
 package foo.bar.example.fore.fullapp02
 
 import android.app.Application
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 
 /**
  * Try not to fill this class with lots of code, if possible move it to a model somewhere
@@ -9,18 +12,26 @@ import android.app.Application
  */
 class App : Application() {
 
-    lateinit var appComponent: AppComponent private set
-
     override fun onCreate() {
         super.onCreate()
 
         inst = this
-        appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
+
+
+        startKoin {
+            // Use Koin Android Logger
+            androidLogger()
+            // declare Android context
+            androidContext(this@App)
+            // declare modules to use
+            modules(appModule)
+        }
+
     }
 
-    fun injectTestAppModule(testAppModule: AppModule) {
-        appComponent = DaggerAppComponent.builder().appModule(testAppModule).build()
-    }
+//    fun injectTestAppModule(testAppModule: AppModule) {
+//       // appComponent = DaggerAppComponent.builder().appModule(testAppModule).build()
+//    }
 
     companion object {
 

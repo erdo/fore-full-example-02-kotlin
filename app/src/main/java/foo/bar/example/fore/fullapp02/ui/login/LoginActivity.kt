@@ -6,6 +6,8 @@ import co.early.fore.lifecycle.LifecycleSyncer
 import co.early.fore.lifecycle.activity.SyncableAppCompatActivity
 import foo.bar.example.fore.fullapp02.App
 import foo.bar.example.fore.fullapp02.R
+import foo.bar.example.fore.fullapp02.feature.login.Authentication
+import org.koin.android.ext.android.inject
 
 
 /**
@@ -14,12 +16,14 @@ import foo.bar.example.fore.fullapp02.R
  */
 class LoginActivity : SyncableAppCompatActivity() {
 
+    private val authentication: Authentication by inject()
+
     override fun getResourceIdForSyncableView(): Int {
         return R.layout.activity_login
     }
 
     override fun getThingsToObserve(): LifecycleSyncer.Observables {
-        return LifecycleSyncer.Observables(App.inst.appComponent.authentication)
+        return LifecycleSyncer.Observables(authentication)
     }
 
     companion object {

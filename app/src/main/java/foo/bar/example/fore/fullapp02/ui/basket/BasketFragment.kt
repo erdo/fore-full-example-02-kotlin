@@ -5,10 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
-import foo.bar.example.fore.fullapp02.App
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.basket.BasketModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 /**
@@ -17,6 +16,9 @@ import foo.bar.example.fore.fullapp02.feature.basket.BasketModel
  */
 class BasketFragment : Fragment() {
 
+    //models that we need to sync with
+    private val basketModel: BasketModel by viewModel()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -24,15 +26,7 @@ class BasketFragment : Fragment() {
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_basket, null)
-
-        /**
-         * Google's ViewModelProviders needs an Activity or Fragment reference to
-         * give us the view model so we don't do it in the view anymore. The factory
-         * is only necessary if the ViewModel has construction parameters
-         */
-        val viewModel = ViewModelProviders.of(this, App.inst.appComponent.basketModelFactory)
-            .get(BasketModel::class.java)
-        (view as BasketView).setViewModel(viewModel)
+        (view as BasketView).setViewModel(basketModel)
         return view
     }
 

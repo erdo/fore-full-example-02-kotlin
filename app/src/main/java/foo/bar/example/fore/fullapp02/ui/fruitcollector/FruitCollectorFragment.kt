@@ -2,8 +2,9 @@ package foo.bar.example.fore.fullapp02.ui.fruitcollector
 
 import co.early.fore.lifecycle.LifecycleSyncer
 import co.early.fore.lifecycle.fragment.SyncableSupportFragment
-import foo.bar.example.fore.fullapp02.App
 import foo.bar.example.fore.fullapp02.R
+import foo.bar.example.fore.fullapp02.feature.fruitcollector.FruitCollectorModel
+import org.koin.android.ext.android.inject
 
 
 /**
@@ -12,13 +13,15 @@ import foo.bar.example.fore.fullapp02.R
  */
 class FruitCollectorFragment : SyncableSupportFragment() {
 
+    private val fruitCollectorModel: FruitCollectorModel by inject()
+
     override fun getResourceIdForSyncableView(): Int {
         return R.layout.fragment_fruitcollector
     }
 
     override fun getThingsToObserve(): LifecycleSyncer.Observables {
         return LifecycleSyncer.Observables(
-            App.inst.appComponent.fruitCollectorModel
+            fruitCollectorModel
         )
     }
 

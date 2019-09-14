@@ -18,6 +18,7 @@ import foo.bar.example.fore.fullapp02.feature.fruitcollector.FruitCollectorModel
 import foo.bar.example.fore.fullapp02.message.UserMessage
 import foo.bar.example.fore.fullapp02.ui.common.uiutils.SyncerAnimationComplete
 import kotlinx.android.synthetic.main.fragment_fruitcollector.view.*
+import org.koin.android.ext.android.inject
 
 /**
  * For the fruit collector example we manage fore observers at the **Fragment** level
@@ -30,7 +31,7 @@ class FruitCollectorView @JvmOverloads constructor(
     RelativeLayout(context, attrs, defStyleAttr), SyncableView {
 
     //models that we need to sync with
-    private lateinit var fruitCollectorModel: FruitCollectorModel
+    private val fruitCollectorModel: FruitCollectorModel by App.inst.inject()
 
     //other UI stuff
     private lateinit var fruitCollectorAdapter: FruitCollectorAdapter
@@ -42,18 +43,11 @@ class FruitCollectorView @JvmOverloads constructor(
     override fun onFinishInflate() {
         super.onFinishInflate()
 
-        getModelReferences()
-
         setupButtonClickListeners()
 
         setupAdapters()
 
         setupAnimationTriggers()
-    }
-
-
-    private fun getModelReferences() {
-        fruitCollectorModel = App.inst.appComponent.fruitCollectorModel
     }
 
 

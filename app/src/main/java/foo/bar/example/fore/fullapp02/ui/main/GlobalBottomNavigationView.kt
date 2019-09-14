@@ -15,6 +15,7 @@ import foo.bar.example.fore.fullapp02.ui.common.uiutils.ViewUtils
 import foo.bar.example.fore.fullapp02.ui.common.widget.BottomNavigationViewWithBadges
 import foo.bar.example.fore.fullapp02.ui.fruitcollector.FruitCollectorFragment
 import foo.bar.example.fore.fullapp02.ui.todolist.TodoListFragment
+import org.koin.android.ext.android.inject
 
 /**
  *
@@ -25,8 +26,8 @@ class GlobalBottomNavigationView @JvmOverloads constructor(
         defStyleAttr: Int = 0) :
     BottomNavigationViewWithBadges(context, attrs, defStyleAttr), SyncableView {
 
-    private lateinit var fruitCollectorModel: FruitCollectorModel
-    private lateinit var todoListModel: TodoListModel
+    private val fruitCollectorModel: FruitCollectorModel by App.inst.inject()
+    private val todoListModel: TodoListModel by App.inst.inject()
 
     private val fruitCollectorFragment = FruitCollectorFragment.newInstance()
     private val basketFragment = BasketFragment.newInstance()
@@ -54,9 +55,6 @@ class GlobalBottomNavigationView @JvmOverloads constructor(
         super.onFinishInflate()
 
         setOnNavigationItemSelectedListener(itemSelectedListener)
-
-        fruitCollectorModel = App.inst.appComponent.fruitCollectorModel
-        todoListModel = App.inst.appComponent.todoListModel
     }
 
     private fun setFragment(fragment: Fragment, fragmentTag: String) {

@@ -18,8 +18,6 @@ import foo.bar.example.fore.fullapp02.api.fruits.FruitPojo
 import foo.bar.example.fore.fullapp02.api.fruits.FruitService
 import foo.bar.example.fore.fullapp02.message.UserMessage
 import java.util.*
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * All the unit testable logic and data for our fruit collector,
@@ -27,8 +25,7 @@ import javax.inject.Singleton
  *
  * (this class knows nothing about views, contexts, nor anything else to do with the android)
  */
-@Singleton
-class FruitCollectorModel @Inject constructor(private val fruitService: FruitService,
+class FruitCollectorModel (private val fruitService: FruitService,
                                               private val callProcessor: CallProcessor<UserMessage>,
                                               private val systemTimeWrapper: SystemTimeWrapper,
                                               private val workMode: WorkMode,

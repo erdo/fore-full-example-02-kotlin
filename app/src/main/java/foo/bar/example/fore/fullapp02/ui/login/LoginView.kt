@@ -18,6 +18,7 @@ import foo.bar.example.fore.fullapp02.ui.common.uiutils.SyncerTextWatcher
 import foo.bar.example.fore.fullapp02.ui.common.uiutils.ViewUtils
 import foo.bar.example.fore.fullapp02.ui.main.MainActivity
 import kotlinx.android.synthetic.main.activity_login.view.*
+import org.koin.android.ext.android.inject
 
 /**
  * For the login example we manage fore observers at the **Activity** level
@@ -30,21 +31,14 @@ class LoginView @JvmOverloads constructor(
 ) :
     ScrollView(context, attrs, defStyleAttr), SyncableView {
 
-    private lateinit var authentication: Authentication
-    private lateinit var logger: Logger
+    private val authentication: Authentication by App.inst.inject()
+    private val logger: Logger by App.inst.inject()
 
 
     public override fun onFinishInflate() {// grab a reference to all the view elements, setup buttons listeners
         super.onFinishInflate()
 
-        setupModelReferences()
-
         setupClickListeners()
-    }
-
-    private fun setupModelReferences() {
-        authentication = App.inst.appComponent.authentication
-        logger = App.inst.appComponent.logger
     }
 
     private fun setupClickListeners() {

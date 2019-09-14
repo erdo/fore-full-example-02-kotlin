@@ -9,6 +9,7 @@ import foo.bar.example.fore.fullapp02.feature.login.Authentication
 import foo.bar.example.fore.fullapp02.ui.common.uiutils.ViewUtils
 import foo.bar.example.fore.fullapp02.ui.login.LoginActivity
 import foo.bar.example.fore.fullapp02.ui.main.MainActivity
+import org.koin.android.ext.android.inject
 
 /**
  * This view has nothing to sync, if the user is logged in, they are sent to the
@@ -21,14 +22,11 @@ class LaunchView @JvmOverloads constructor(
 ) :
     RelativeLayout(context, attrs, defStyleAttr) {
 
-    private lateinit var authentication: Authentication
+    private val authentication: Authentication by App.inst.inject()
 
 
     public override fun onFinishInflate() {
         super.onFinishInflate()
-
-        // grab a reference to any models we need here
-        authentication = App.inst.appComponent.authentication
 
         //redirect based on logged in status
         Handler().postDelayed({
