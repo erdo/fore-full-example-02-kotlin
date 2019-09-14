@@ -13,4 +13,4 @@ import org.koin.core.qualifier.Qualifier
 inline fun <reified T : Any> View.inject(
     qualifier: Qualifier? = null,
     noinline parameters: ParametersDefinition? = null
-) = lazy { App.inst.inject<T>(qualifier, parameters) }
+) = App.inst.inject<T>(qualifier, parameters)

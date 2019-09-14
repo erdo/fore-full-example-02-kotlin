@@ -31,8 +31,8 @@ class LoginView @JvmOverloads constructor(
 ) :
     ScrollView(context, attrs, defStyleAttr), SyncableView {
 
-    private val authentication: Authentication by App.inst.inject()
-    private val logger: Logger by App.inst.inject()
+    private val authentication: Authentication by inject()
+    private val logger: Logger by inject()
 
 
     public override fun onFinishInflate() {// grab a reference to all the view elements, setup buttons listeners

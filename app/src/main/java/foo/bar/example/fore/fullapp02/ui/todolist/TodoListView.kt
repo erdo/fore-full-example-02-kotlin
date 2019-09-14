@@ -12,12 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import co.early.fore.core.logging.Logger
 import co.early.fore.core.ui.SyncableView
-import foo.bar.example.fore.fullapp02.App
 import foo.bar.example.fore.fullapp02.feature.todolist.TodoItem
 import foo.bar.example.fore.fullapp02.feature.todolist.TodoListModel
 import foo.bar.example.fore.fullapp02.ui.common.uiutils.SyncerTextWatcher
+import foo.bar.example.fore.fullapp02.ui.common.uiutils.inject
 import kotlinx.android.synthetic.main.fragment_todolist.view.*
-import org.koin.android.ext.android.inject
 
 
 /**
@@ -31,8 +30,8 @@ class TodoListView @JvmOverloads constructor(
     RelativeLayout(context, attrs, defStyleAttr), SyncableView {
 
     //models that we need
-    private val todoListModel: TodoListModel by App.inst.inject()
-    private val logger: Logger by App.inst.inject()
+    private val todoListModel: TodoListModel by inject()
+    private val logger: Logger by inject()
 
     private lateinit var todoListAdapter: TodoListAdapter
     private lateinit var animationSet: AnimatorSet

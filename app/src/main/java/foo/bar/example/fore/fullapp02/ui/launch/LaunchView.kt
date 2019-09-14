@@ -4,12 +4,11 @@ import android.content.Context
 import android.os.Handler
 import android.util.AttributeSet
 import android.widget.RelativeLayout
-import foo.bar.example.fore.fullapp02.App
 import foo.bar.example.fore.fullapp02.feature.login.Authentication
 import foo.bar.example.fore.fullapp02.ui.common.uiutils.ViewUtils
+import foo.bar.example.fore.fullapp02.ui.common.uiutils.inject
 import foo.bar.example.fore.fullapp02.ui.login.LoginActivity
 import foo.bar.example.fore.fullapp02.ui.main.MainActivity
-import org.koin.android.ext.android.inject
 
 /**
  * This view has nothing to sync, if the user is logged in, they are sent to the
@@ -22,7 +21,7 @@ class LaunchView @JvmOverloads constructor(
 ) :
     RelativeLayout(context, attrs, defStyleAttr) {
 
-    private val authentication: Authentication by App.inst.inject()
+    private val authentication: Authentication by inject()
 
 
     public override fun onFinishInflate() {

@@ -12,6 +12,7 @@ import foo.bar.example.fore.fullapp02.feature.fruitcollector.FruitCollectorModel
 import foo.bar.example.fore.fullapp02.feature.todolist.TodoListModel
 import foo.bar.example.fore.fullapp02.ui.basket.BasketFragment
 import foo.bar.example.fore.fullapp02.ui.common.uiutils.ViewUtils
+import foo.bar.example.fore.fullapp02.ui.common.uiutils.inject
 import foo.bar.example.fore.fullapp02.ui.common.widget.BottomNavigationViewWithBadges
 import foo.bar.example.fore.fullapp02.ui.fruitcollector.FruitCollectorFragment
 import foo.bar.example.fore.fullapp02.ui.todolist.TodoListFragment
@@ -26,8 +27,8 @@ class GlobalBottomNavigationView @JvmOverloads constructor(
         defStyleAttr: Int = 0) :
     BottomNavigationViewWithBadges(context, attrs, defStyleAttr), SyncableView {
 
-    private val fruitCollectorModel: FruitCollectorModel by App.inst.inject()
-    private val todoListModel: TodoListModel by App.inst.inject()
+    private val fruitCollectorModel: FruitCollectorModel by inject()
+    private val todoListModel: TodoListModel by inject()
 
     private val fruitCollectorFragment = FruitCollectorFragment.newInstance()
     private val basketFragment = BasketFragment.newInstance()

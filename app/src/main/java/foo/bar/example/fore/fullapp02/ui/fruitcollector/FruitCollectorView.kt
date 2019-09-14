@@ -13,12 +13,11 @@ import co.early.fore.core.callbacks.FailureCallbackWithPayload
 import co.early.fore.core.callbacks.SuccessCallback
 import co.early.fore.core.ui.SyncTrigger
 import co.early.fore.core.ui.SyncableView
-import foo.bar.example.fore.fullapp02.App
 import foo.bar.example.fore.fullapp02.feature.fruitcollector.FruitCollectorModel
 import foo.bar.example.fore.fullapp02.message.UserMessage
 import foo.bar.example.fore.fullapp02.ui.common.uiutils.SyncerAnimationComplete
+import foo.bar.example.fore.fullapp02.ui.common.uiutils.inject
 import kotlinx.android.synthetic.main.fragment_fruitcollector.view.*
-import org.koin.android.ext.android.inject
 
 /**
  * For the fruit collector example we manage fore observers at the **Fragment** level
@@ -31,7 +30,7 @@ class FruitCollectorView @JvmOverloads constructor(
     RelativeLayout(context, attrs, defStyleAttr), SyncableView {
 
     //models that we need to sync with
-    private val fruitCollectorModel: FruitCollectorModel by App.inst.inject()
+    private val fruitCollectorModel: FruitCollectorModel by inject()
 
     //other UI stuff
     private lateinit var fruitCollectorAdapter: FruitCollectorAdapter
