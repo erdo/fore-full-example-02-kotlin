@@ -7,7 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import co.early.fore.lifecycle.LifecycleSyncer
-import co.early.fore.lifecycle.activity.SyncableAppCompatActivity
+import co.early.fore.lifecycle.view.SyncViewXActivity
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.fruitcollector.FruitCollectorModel
 import foo.bar.example.fore.fullapp02.feature.login.Authentication
@@ -20,10 +20,10 @@ import org.koin.android.ext.android.inject
  * For the tab content in this example we manage fore observers at the **Fragment** level,
  * However we still want the bottom navigation bar to be reactive, so we ask it to observe
  * a few models
- * here so that it can keep its badges in sync - SyncableAppCompatActivity does most
+ * here so that it can keep its badges in sync - SyncViewXActivity does most
  * of the leg work for us
  */
-class MainActivity : SyncableAppCompatActivity() {
+class MainActivity : SyncViewXActivity() {
 
     private val authentication: Authentication by inject()
     private val todoListModel: TodoListModel by inject()

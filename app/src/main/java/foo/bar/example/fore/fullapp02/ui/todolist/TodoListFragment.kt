@@ -1,7 +1,7 @@
 package foo.bar.example.fore.fullapp02.ui.todolist
 
 import co.early.fore.lifecycle.LifecycleSyncer
-import co.early.fore.lifecycle.fragment.SyncableSupportFragment
+import co.early.fore.lifecycle.view.SyncViewXFragment
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.todolist.TodoListModel
 import org.koin.android.ext.android.inject
@@ -9,9 +9,9 @@ import org.koin.android.ext.android.inject
 
 /**
  * For the todolist example we manage fore observers at the **Fragment** level
- * using: [SyncableSupportFragment]
+ * using: [SyncViewXFragment]
  */
-class TodoListFragment : SyncableSupportFragment() {
+class TodoListFragment : SyncViewXFragment() {
 
     private val todoListModel: TodoListModel by inject()
 

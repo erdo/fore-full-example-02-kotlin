@@ -17,7 +17,6 @@ class App : Application() {
 
         inst = this
 
-
         startKoin {
             // Use Koin Android Logger
             androidLogger()

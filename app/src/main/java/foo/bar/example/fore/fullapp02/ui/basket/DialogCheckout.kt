@@ -2,8 +2,8 @@ package foo.bar.example.fore.fullapp02.ui.basket
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.app.DialogFragment
 import android.os.Bundle
+import androidx.fragment.app.DialogFragment
 import foo.bar.example.fore.fullapp02.R
 
 /**

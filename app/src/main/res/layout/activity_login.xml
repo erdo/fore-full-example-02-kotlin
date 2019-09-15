@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<foo.bar.example.fore.fullapp02.ui.login.LoginView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    android:id="@+id/login_container_scrollview"
     android:background="@color/colorWhite">
 
     <RelativeLayout
@@ -123,4 +124,4 @@
 
     </RelativeLayout>
 
-</foo.bar.example.fore.fullapp02.ui.login.LoginView>
+</ScrollView>

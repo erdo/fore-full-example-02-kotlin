@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import co.early.fore.lifecycle.LifecycleSyncer
+import co.early.fore.lifecycle.fragment.SyncXFragment
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.basket.BasketModel
+import foo.bar.example.fore.fullapp02.utils.MoneyFormatter
+import kotlinx.android.synthetic.main.fragment_basket.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -14,7 +17,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  * For the basket example we manage fore observers at the **View** level
  * [BasketView]
  */
-class BasketFragment : Fragment() {
+class BasketFragment : SyncXFragment() {
 
     //models that we need to sync with
     private val basketModel: BasketModel by viewModel()
@@ -24,10 +27,51 @@ class BasketFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        return inflater.inflate(R.layout.fragment_basket, null)
+    }
 
-        val view = inflater.inflate(R.layout.fragment_basket, null)
-        (view as BasketView).setViewModel(basketModel)
-        return view
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupButtonClickListeners()
+    }
+
+    private fun setupButtonClickListeners() {
+
+        basket_add_button.setOnClickListener { v -> basketModel.addItem() }
+
+        basket_remove_button.setOnClickListener { v -> basketModel.removeItem() }
+
+        basket_checkout_button.setOnClickListener { v ->
+            DialogCheckout.newInstance().show(
+                requireFragmentManager(),
+                DialogCheckout::class.java.simpleName
+            )
+        }
+
+        basket_discount_checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+            basketModel.isDiscountEnabled = isChecked
+        }
+    }
+
+
+    //data binding stuff below
+
+    override fun syncView() {
+        basket_items_txt.text = "" + basketModel.numberOfItems
+        basket_remove_button.isEnabled = basketModel.numberOfItems > 0
+        basket_total_text.text = MoneyFormatter.format(basketModel.totalCost)
+        basket_discount_text.text = MoneyFormatter.format(basketModel.totalDiscount)
+        basket_discount_checkbox.isEnabled = basketModel.isDiscountEnabled
+        basket_checkout_button.isEnabled = basketModel.numberOfItems > 0
+    }
+
+    override fun getThingsToObserve(): LifecycleSyncer.Observables {
+        return LifecycleSyncer.Observables(
+            basketModel
+        )
     }
 
     companion object {

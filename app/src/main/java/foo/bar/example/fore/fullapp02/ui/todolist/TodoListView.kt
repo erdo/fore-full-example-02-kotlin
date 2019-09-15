@@ -155,23 +155,4 @@ class TodoListView @JvmOverloads constructor(
         todo_clear_button.isEnabled = todoListModel.hasAnyItems()
         todoListAdapter.notifyDataSetChangedAuto()
     }
-
-
-    /**
-     * For these examples we are managing fore observers at the **Fragment**
-     * level, so the below is not required
-     */
-    //    @Override
-    //    protected void onAttachedToWindow() {
-    //        super.onAttachedToWindow();
-    //        todoListModel.addObserver(observer);
-    //        syncView(); //  <- don't forget this
-    //    }
-    //
-    //
-    //    @Override
-    //    protected void onDetachedFromWindow() {
-    //        super.onDetachedFromWindow();
-    //        todoListModel.removeObserver(observer);
-    //    }
 }
