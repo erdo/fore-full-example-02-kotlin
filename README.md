@@ -18,6 +18,13 @@ There is a lot going on in the UI of this app, the point is to demonstrate how y
 
 - The **bottom navigation bar** in this app has badges added to it so that we can demonstrate how the observer pattern can be used to automatically update parts of the UI as appropriate. For example, try fetching some fruit, then change tabs, then rotate the device - fore Observers will ensure that the badge number remains consistent, even after the fruit network request has returned with new fruit.
 
+- There is a permissions implementation you might want to steal, that pushes a lot of the boiler plate code out of the UI layer (using kotlin delegation)
+
+- The DI is straight forwardly implemented with Koin
+
+- The app uses a mix of techniques at the UI layer. eg: putting most of the view code in the Activity class, putting most of it in the Fragment class, and putting most of it in a custom View class, so you can compare the different ways of achieving the same thing. All the apps use the fore data binding technique
+for very lightweight ui layer code anyway
+
 
 > "fore Observers will ensure that the badge number remains consistent"
 
@@ -27,36 +34,18 @@ There is a lot going on in the UI of this app, the point is to demonstrate how y
 
 ## Main Library Choices
 
-Networking - Retrofit and OKHttp
-DI - Koin
-DB - Room
-ViewModels - androidx.lifecycle.ViewModel
-databinding - early.fore
-
-
-TODO...
+Networking - Retrofit and OKHttp<br/>
+DI - Koin<br/>
+ViewModels - androidx.lifecycle.ViewModel<br/>
+databinding - early.fore<br/>
 
 
 ## Dependency Injection
 
-The app in the master branch is implemented using a pure DI solution. An identical app that uses Dagger 2 for dependency injection is in [this feature branch](https://github.com/erdo/fore-full-example-01-kotlin/tree/feature/dagger-version/app/src/main/java/foo/bar/example/fore/fullapp01).
+The app in the master branch is implemented using Koin DI. A version using Dagger 2 is in another branch. Previously there was a pure DI version that worked
+perfectly well without any DI library (check the small app samples in the main fore repo for examples of that). More discussion on DI [here](https://erdo.github.io/android-fore/05-extras.html#dependency-injection-basics)
 
-The pure DI version is less boiler plate and (arguably) quite a lot easier to follow than the Dagger version, hence it's in master. I haven't added a bunch of tests to this app but I don't expect that to make any difference, both solutions are equally testable (as they both implement dependency injection).
-
-For examples of testing, please see the [sample apps](https://erdo.github.io/android-fore/#sample-apps) included with the fore library which are tested to within an inch of their lives and also use pure DI. More discussion on DI [here](https://erdo.github.io/android-fore/05-extras.html#dependency-injection-basics).
-
-
-### master branch using pure DI
-
-http://cloc.sourceforge.net v 1.62  T=0.65 s (102.5 files/s, 6099.3 lines/s)
-
-| Language  | files  | blank  | comment | code |
-|:----------|-------:|-------:|--------:|-----:|
-| Kotlin    | 42     | 633    | 381     | 1566 |
-| XML       | 25     | 151    | 9       | 816  |
-| SUM:      | 67     | 784    | 290     | 2382 |
-
-
+For examples of testing, please see the [sample apps](https://erdo.github.io/android-fore/#sample-apps) included with the fore library which are tested to within an inch of their lives.
 
 
 ## License
