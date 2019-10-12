@@ -20,7 +20,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 
-val appModule = module {
+val appModule = module(override = true) {
 
     /**
      * Common
