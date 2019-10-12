@@ -16,7 +16,7 @@ import foo.bar.example.fore.fullapp02.R
  * returns these messages if there are any problems with our network connection,
  * so the business layer knows nothing about HTTP codes etc - it only deals with these UserMessages
  */
-enum class UserMessage constructor(private val messageResId: Int) : Parcelable {
+enum class UserMessage constructor(val messageResId: Int) : Parcelable {
 
     ERROR_MISC(R.string.msg_error_misc),
     ERROR_NETWORK(R.string.msg_error_network),
@@ -24,6 +24,7 @@ enum class UserMessage constructor(private val messageResId: Int) : Parcelable {
     ERROR_CLIENT(R.string.msg_error_client),
     ERROR_SESSION_TIMED_OUT(R.string.msg_error_session_timeout),
     ERROR_BUSY(R.string.msg_error_busy),
+    ERROR_PERMISSION_DENIED(R.string.msg_error_permission_denied),
     ERROR_CANCELLED(R.string.msg_error_cancelled);
 
     private var message: String = ""

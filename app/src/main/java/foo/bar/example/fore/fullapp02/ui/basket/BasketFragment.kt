@@ -8,6 +8,7 @@ import co.early.fore.lifecycle.LifecycleSyncer
 import co.early.fore.lifecycle.fragment.SyncXFragment
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.basket.BasketModel
+import foo.bar.example.fore.fullapp02.ui.common.widget.NotImplementedDialog
 import foo.bar.example.fore.fullapp02.utils.MoneyFormatter
 import kotlinx.android.synthetic.main.fragment_basket.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -45,9 +46,9 @@ class BasketFragment : SyncXFragment() {
         basket_remove_button.setOnClickListener { v -> basketModel.removeItem() }
 
         basket_checkout_button.setOnClickListener { v ->
-            DialogCheckout.newInstance().show(
+            NotImplementedDialog.newInstance().show(
                 requireFragmentManager(),
-                DialogCheckout::class.java.simpleName
+                NotImplementedDialog::class.java.simpleName
             )
         }
 

@@ -30,16 +30,16 @@
     <string name="basket_total">Total</string>
     <string name="basket_discount">Discount</string>
     <string name="basket_checkout">Checkout</string>
-    <string name="basket_checkout_msg">Sorry, the checkout feature has not been implemented</string>
     <string name="basket_info_msg">The BasketModel driving this view is locally scoped (rather
         than application level scoped) so if you navigate away from the tab it will be destroyed.
         But because it is an androidx ViewModel, it DOES survive rotation.</string>
 
     <!-- todolist -->
-    <string name="todo_clear">Clear All</string>
+    <string name="todo_clear">Clear</string>
     <string name="todo_mark_done">Mark As Done</string>
     <string name="todo_create">Create</string>
     <string name="todo_add">Add</string>
+    <string name="todo_export">Exp</string>
     <string name="todo_hide">Hide</string>
     <string name="todo_show_done">Show Done</string>
     <string name="todo_desc_hint">Description</string>
@@ -48,6 +48,8 @@
     <string name="common_dialog_title">Info</string>
     <string name="common_ok">ok</string>
     <string name="common_cancel">cancel</string>
+    <string name="common_not_implemented_msg">Sorry, this feature has not been implemented</string>
+    <string name="common_permission_denied_msg">you denied me!</string>
 
     <!-- error messages -->
     <string name="msg_empty_message"></string>
@@ -57,6 +59,7 @@
     <string name="msg_error_client">Client error</string>
     <string name="msg_error_session_timeout">Unauthorized</string>
     <string name="msg_error_busy">Busy</string>
+    <string name="msg_error_permission_denied">Permission Denied</string>
     <string name="msg_error_cancelled">Cancelled</string>
 
 </resources>

@@ -23,8 +23,8 @@ import java.util.*
  * more robust because of this). See here for more info
  * (https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k)
  */
-class BasketModel(logger: Logger) : ViewModel(),
-                                    Observable by ObservableImp(WorkMode.SYNCHRONOUS) {
+class BasketModel(logger: Logger, workMode: WorkMode) : ViewModel(),
+    Observable by ObservableImp(workMode) {
 
 
     private val items = ArrayList<BasketItem>()

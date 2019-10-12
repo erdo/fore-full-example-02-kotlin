@@ -9,7 +9,7 @@ import org.koin.android.ext.android.inject
 
 /**
  * For the todolist example we manage fore observers at the **Fragment** level
- * using: [SyncViewXFragment]
+ * but we sync at the view level [SyncViewXFragment]
  */
 class TodoListFragment : SyncViewXFragment() {
 

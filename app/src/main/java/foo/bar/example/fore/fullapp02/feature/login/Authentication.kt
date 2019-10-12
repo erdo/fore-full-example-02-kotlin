@@ -18,7 +18,7 @@ import foo.bar.example.fore.fullapp02.message.UserMessage
  *
  * (this class knows nothing about views, contexts, nor anything to do with the android)
  */
-class Authentication (
+class Authentication(
     private val authenticationService: AuthenticationService,
     private val callProcessor: CallProcessor<UserMessage>,
     private val workMode: WorkMode,
@@ -54,7 +54,8 @@ class Authentication (
 
         // this is the network call, CallProcessor handles a lot of the complication
         // and lets us mock network calls during tests
-        callProcessor.processCall<SessionResponsePojo>(authenticationService.getSessionToken(SessionRequestPojo(username, password),
+        callProcessor.processCall<SessionResponsePojo>(authenticationService.getSessionToken(
+            SessionRequestPojo(username, password),
             "3s"
         ),
             workMode,
@@ -75,10 +76,11 @@ class Authentication (
         callProcessor.processCall(authenticationService.invalidateSessionToken("3s"), workMode,
             { successResponse ->
                 //do nothing
+            },
+            { failureMessage ->
+                //do nothing - but in reality, maybe warn user that they weren't properly logged out
             }
-        ) { failureMessage ->
-            //do nothing - but in reality, maybe warn user that they weren't properly logged out
-        }
+        )
 
         sessionToken = ""
         notifyObservers()

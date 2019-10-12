@@ -11,9 +11,13 @@ import co.early.fore.lifecycle.view.SyncViewXActivity
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.fruitcollector.FruitCollectorModel
 import foo.bar.example.fore.fullapp02.feature.login.Authentication
+import foo.bar.example.fore.fullapp02.feature.permission.Permission
+import foo.bar.example.fore.fullapp02.feature.permission.PermissionReceiver
 import foo.bar.example.fore.fullapp02.feature.todolist.TodoListModel
 import foo.bar.example.fore.fullapp02.ui.login.LoginActivity
 import org.koin.android.ext.android.inject
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 
 /**
@@ -23,7 +27,8 @@ import org.koin.android.ext.android.inject
  * here so that it can keep its badges in sync - SyncViewXActivity does most
  * of the leg work for us
  */
-class MainActivity : SyncViewXActivity() {
+
+class MainActivity : SyncViewXActivity(), PermissionReceiver by permission {
 
     private val authentication: Authentication by inject()
     private val todoListModel: TodoListModel by inject()
@@ -60,25 +65,6 @@ class MainActivity : SyncViewXActivity() {
         }
     }
 
-//    private fun setupNavigationController(savedInstanceState: Bundle?) {
-//
-//        val navHostFragment = (navigationHostFragment as NavHostFragment)
-//        val navController = navHostFragment.navController
-//        val appBarConfiguration = AppBarConfiguration(
-//            topLevelDestinationIds = setOf(
-//                R.id.navigation_fruit,
-//                R.id.navigation_basket,
-//                R.id.navigation_todo
-//            )
-//        )
-//
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-//        navigationView.setupWithNavController(navController)
-//    }
-//
-//    override fun onSupportNavigateUp() = findNavController(R.id.navigationHostFragment).navigateUp()
-
-
     /**
      * SyncableAppCompatActivity methods
      */
@@ -92,7 +78,7 @@ class MainActivity : SyncViewXActivity() {
             fruitCollectorModel,
             todoListModel
             // note that we are not observing the basket model as it has been implemented
-            // as a locally scoped model that doesn't exist when we are not on the basket view
+            // as a locally scoped view model that doesn't exist when we are not on the basket view
         )
     }
 
@@ -134,7 +120,14 @@ class MainActivity : SyncViewXActivity() {
         }
     }
 
-    companion object {
+    override fun onDestroy() {
+        super.onDestroy()
+        permissionClearUp()//because we could be waiting for outstanding permissions
+    }
+
+    companion object : KoinComponent {
+
+        private val permission: Permission by inject()
 
         fun start(context: Context) {
             val intent = build(context)

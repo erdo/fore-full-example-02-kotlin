@@ -14,6 +14,8 @@ import foo.bar.example.fore.fullapp02.api.fruits.FruitService
 import foo.bar.example.fore.fullapp02.feature.basket.BasketModel
 import foo.bar.example.fore.fullapp02.feature.fruitcollector.FruitCollectorModel
 import foo.bar.example.fore.fullapp02.feature.login.Authentication
+import foo.bar.example.fore.fullapp02.feature.permission.Permission
+import foo.bar.example.fore.fullapp02.feature.permission.SystemPermissionWrapper
 import foo.bar.example.fore.fullapp02.feature.todolist.TodoListModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -43,6 +45,10 @@ val appModule = module(override = true) {
 
     single { SystemTimeWrapper() }
 
+    single { SystemPermissionWrapper() }
+
+    single { Permission(get(), get(), get(), get()) }
+
 
     /**
      * Features
@@ -65,7 +71,7 @@ val appModule = module(override = true) {
      * ViewModels
      */
 
-    viewModel { BasketModel(get()) }
+    viewModel { BasketModel(get(), WorkMode.SYNCHRONOUS) }
 }
 
 
