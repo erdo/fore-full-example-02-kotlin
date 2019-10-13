@@ -12,15 +12,18 @@ import foo.bar.example.fore.fullapp02.api.CustomRetrofitBuilder
 import foo.bar.example.fore.fullapp02.api.authentication.AuthenticationService
 import foo.bar.example.fore.fullapp02.api.fruits.FruitService
 import foo.bar.example.fore.fullapp02.feature.basket.BasketModel
+import foo.bar.example.fore.fullapp02.feature.csv.ReaderWriter
 import foo.bar.example.fore.fullapp02.feature.fruitcollector.FruitCollectorModel
 import foo.bar.example.fore.fullapp02.feature.login.Authentication
 import foo.bar.example.fore.fullapp02.feature.permission.Permission
 import foo.bar.example.fore.fullapp02.feature.permission.SystemPermissionWrapper
+import foo.bar.example.fore.fullapp02.feature.todolist.TodoListExporter
 import foo.bar.example.fore.fullapp02.feature.todolist.TodoListModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
+import java.io.File
 
 val appModule = module(override = true) {
 
@@ -57,6 +60,13 @@ val appModule = module(override = true) {
     single { Authentication(get(), get(), get(), get()) }
     single { FruitCollectorModel(get(), get(), get(), get(), get()) }
     single { TodoListModel(get(), get()) }
+    single { TodoListExporter(get(), get(), get(), get(), get()) }
+    single {
+        ReaderWriter(
+            get(),
+            File((get() as App).filesDir.path) // on the device see data/data/[apppackage]/files
+        )
+    } //testing path Environment.getDataDirectory()
 
 
     /**

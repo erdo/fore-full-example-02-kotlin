@@ -15,11 +15,18 @@ import java.util.*
  * All the unit testable logic and data for our todolist
  *
  * (this class knows nothing about views, contexts, nor anything else to do with the android)
+ *
+ * - it's driving an adapter so we have functions like get() and size()
+ * - we want nice easily animated list changes so we implement Updateable
+ * - we also implement Iterable as this make it nice and easy when we come to export the data
  */
-class TodoListModel (systemTimeWrapper: SystemTimeWrapper, logger: Logger) : ObservableImp(WorkMode.SYNCHRONOUS, logger),
-                                                                            Updateable {
+class TodoListModel(systemTimeWrapper: SystemTimeWrapper, logger: Logger) :
+    ObservableImp(WorkMode.SYNCHRONOUS, logger),
+    Updateable, Iterable<TodoItem> {
 
+    //list of all items, including the ones that are done
     private val todoList: MutableList<TodoItem>
+    //only the list of items that are currently visible on the display
     private val displayList: ChangeAwareList<TodoItem>
     private var displayDoneItems = false
     private var itemsNotYetDone: Int = 0
@@ -121,5 +128,20 @@ class TodoListModel (systemTimeWrapper: SystemTimeWrapper, logger: Logger) : Obs
 
     override fun getAndClearLatestUpdateSpec(maxAgeMs: Long): UpdateSpec {
         return displayList.getAndClearLatestUpdateSpec(maxAgeMs)
+    }
+
+    override fun iterator(): Iterator<TodoItem> {
+        return object : Iterator<TodoItem> {
+
+            private var currentIndex = 0
+
+            override fun hasNext(): Boolean {
+                return currentIndex < todoList.size && todoList[currentIndex] != null
+            }
+
+            override fun next(): TodoItem {
+                return todoList[currentIndex++]
+            }
+        }
     }
 }

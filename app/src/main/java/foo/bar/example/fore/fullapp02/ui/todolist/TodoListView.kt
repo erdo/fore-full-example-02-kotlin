@@ -17,6 +17,7 @@ import co.early.fore.core.ui.SyncableView
 import co.early.fore.lifecycle.view.SyncViewXFragment
 import foo.bar.example.fore.fullapp02.feature.permission.Permission
 import foo.bar.example.fore.fullapp02.feature.todolist.TodoItem
+import foo.bar.example.fore.fullapp02.feature.todolist.TodoListExporter
 import foo.bar.example.fore.fullapp02.feature.todolist.TodoListModel
 import foo.bar.example.fore.fullapp02.message.UserMessage
 import foo.bar.example.fore.fullapp02.ui.common.uiutils.SyncerTextWatcher
@@ -39,6 +40,7 @@ class TodoListView @JvmOverloads constructor(
     private val todoListModel: TodoListModel by inject()
     private val logger: Logger by inject()
     private val permission: Permission by inject()
+    private val todoListExporter: TodoListExporter by inject()
 
     private lateinit var todoListAdapter: TodoListAdapter
     private lateinit var animationSet: AnimatorSet
@@ -77,11 +79,22 @@ class TodoListView @JvmOverloads constructor(
             permission.permissionRequest(
                 (context as Activity),
                 {
-                    Toast.makeText(
-                        context,
-                        "doing the stuff",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    todoListExporter.exportCurrentTodoList(
+                        {
+                            Toast.makeText(
+                                context,
+                                "Export complete",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        },
+                        { failureMessage ->
+                            Toast.makeText(
+                                context,
+                                failureMessage.messageResId,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    )
                 },
                 {
                     Toast.makeText(
@@ -185,6 +198,7 @@ class TodoListView @JvmOverloads constructor(
             todoListModel.isValidItemDescription(todo_description_edit.text.toString())
         todo_showdone_switch.isChecked = todoListModel.displayDoneItems()
         todo_clear_button.isEnabled = todoListModel.hasAnyItems()
+        todo_export_button.isEnabled = !todoListExporter.isBusy
         todoListAdapter.notifyDataSetChangedAuto()
     }
 }
