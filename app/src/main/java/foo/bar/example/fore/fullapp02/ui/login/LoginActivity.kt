@@ -11,6 +11,7 @@ import co.early.fore.core.callbacks.FailureCallbackWithPayload
 import co.early.fore.core.callbacks.SuccessCallback
 import co.early.fore.core.logging.Logger
 import co.early.fore.lifecycle.LifecycleSyncer
+import co.early.fore.lifecycle.activity.SyncActivityX
 import co.early.fore.lifecycle.activity.SyncXActivity
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.login.Authentication
@@ -26,7 +27,7 @@ import org.koin.android.ext.android.inject
  * For the login example we manage fore observers at the **Activity** level
  * using: [SyncXActivity]
  */
-class LoginActivity : SyncXActivity() {
+class LoginActivity : SyncActivityX() {
 
     //models we need
     private val authentication: Authentication by inject()
@@ -82,7 +83,7 @@ class LoginActivity : SyncXActivity() {
 
         logger.i(LOG_TAG, "syncView()")
 
-         val emailValid = authentication.isEmail(login_email_edittext.text.toString())
+        val emailValid = authentication.isEmail(login_email_edittext.text.toString())
         val passwordValid = authentication.isPassword(login_password_edittext.text.toString())
         val enableLoginButton = emailValid && passwordValid && !authentication.hasSessionToken()
 

@@ -29,10 +29,10 @@ android {
 
 dependencies {
 
-    implementation(group: 'co.early.fore', name: 'fore-core', version: "1.0.2", ext: 'aar')
-    implementation(group: 'co.early.fore', name: 'fore-retrofit', version: "1.0.2", ext: 'aar')
-    implementation(group: 'co.early.fore', name: 'fore-adapters', version: "1.0.2", ext: 'aar')
-    implementation(group: 'co.early.fore', name: 'fore-lifecycle', version: "1.0.2", ext: 'aar')
+    implementation(group: 'co.early.fore', name: 'fore-core', version: "1.0.3", ext: 'aar')
+    implementation(group: 'co.early.fore', name: 'fore-retrofit', version: "1.0.3", ext: 'aar')
+    implementation(group: 'co.early.fore', name: 'fore-adapters', version: "1.0.3", ext: 'aar')
+    implementation(group: 'co.early.fore', name: 'fore-lifecycle', version: "1.0.3", ext: 'aar')
 
     implementation('com.squareup.retrofit2:retrofit:2.1.0') {
         // exclude Retrofit’s OkHttp peer-dependency module and define your own module import

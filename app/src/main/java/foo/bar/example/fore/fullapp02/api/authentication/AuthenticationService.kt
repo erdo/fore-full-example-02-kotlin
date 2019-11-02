@@ -16,8 +16,8 @@ interface AuthenticationService {
 
     @POST("5a48e531310000aa06a8211d/")
     fun getSessionToken(
-            @Body sessionRequestPojo: SessionRequestPojo,
-            @Query("mocky-delay") delayScalaDurationFormat: String
+        @Body sessionRequestPojo: SessionRequestPojo,
+        @Query("mocky-delay") delayScalaDurationFormat: String
     ): Call<SessionResponsePojo>
 
     @POST("5a48e611310000a106a82120/")

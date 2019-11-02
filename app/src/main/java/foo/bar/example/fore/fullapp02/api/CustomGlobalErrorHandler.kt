@@ -1,16 +1,11 @@
 package foo.bar.example.fore.fullapp02.api
 
-import co.early.fore.core.Affirm.notNull
 import co.early.fore.core.logging.Logger
 import co.early.fore.retrofit.ErrorHandler
 import co.early.fore.retrofit.MessageProvider
 import com.google.gson.Gson
 import foo.bar.example.fore.fullapp02.message.UserMessage
-import foo.bar.example.fore.fullapp02.message.UserMessage.ERROR_CLIENT
-import foo.bar.example.fore.fullapp02.message.UserMessage.ERROR_MISC
-import foo.bar.example.fore.fullapp02.message.UserMessage.ERROR_NETWORK
-import foo.bar.example.fore.fullapp02.message.UserMessage.ERROR_SERVER
-import foo.bar.example.fore.fullapp02.message.UserMessage.ERROR_SESSION_TIMED_OUT
+import foo.bar.example.fore.fullapp02.message.UserMessage.*
 import okhttp3.Request
 import retrofit2.Response
 import java.io.InputStreamReader
@@ -20,16 +15,14 @@ import java.io.UnsupportedEncodingException
  * You can probably use this class almost as it is for your own app, but you might want to
  * customise the behaviour for specific HTTP codes etc, hence it's not in the fore library
  */
-class CustomGlobalErrorHandler(logWrapper: Logger) : ErrorHandler<UserMessage> {
+class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<UserMessage> {
 
-    private val logWrapper: Logger
-
-    init {
-        this.logWrapper = notNull(logWrapper)
-    }
-
-
-    override fun <CE : MessageProvider<UserMessage>> handleError(t: Throwable?, errorResponse: Response<*>?, customErrorClazz: Class<CE>?, originalRequest: Request): UserMessage {
+    override fun <CE : MessageProvider<UserMessage>> handleError(
+        t: Throwable?,
+        errorResponse: Response<*>?,
+        customErrorClazz: Class<CE>?,
+        originalRequest: Request
+    ): UserMessage {
 
         var message = ERROR_MISC
 
@@ -69,21 +62,27 @@ class CustomGlobalErrorHandler(logWrapper: Logger) : ErrorHandler<UserMessage> {
             }
         }
 
-
         logWrapper.e(TAG, "handleError() returning:" + message)
 
         return message
     }
 
 
-    private fun <CE : MessageProvider<UserMessage>> parseCustomError(provisionalErrorMessage: UserMessage, errorResponse: Response<*>, customErrorClazz: Class<CE>): UserMessage {
+    private fun <CE : MessageProvider<UserMessage>> parseCustomError(
+        provisionalErrorMessage: UserMessage,
+        errorResponse: Response<*>,
+        customErrorClazz: Class<CE>
+    ): UserMessage {
 
         val gson = Gson()
 
         var customError: CE? = null
 
         try {
-            customError = gson.fromJson(InputStreamReader(errorResponse.errorBody().byteStream(), "UTF-8"), customErrorClazz)
+            customError = gson.fromJson(
+                InputStreamReader(errorResponse.errorBody().byteStream(), "UTF-8"),
+                customErrorClazz
+            )
         } catch (e: UnsupportedEncodingException) {
             logWrapper.e(TAG, "parseCustomError() No more error details", e)
         } catch (e: IllegalStateException) {
@@ -103,7 +102,6 @@ class CustomGlobalErrorHandler(logWrapper: Logger) : ErrorHandler<UserMessage> {
     }
 
     companion object {
-
         private val TAG = CustomGlobalErrorHandler::class.java.simpleName
     }
 }

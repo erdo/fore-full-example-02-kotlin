@@ -7,23 +7,21 @@ import java.util.*
 
 object MoneyFormatter {
 
-    private var format: NumberFormat? = null
     private val HUNDRED = BigDecimal.valueOf(100)
+    private val format: NumberFormat = NumberFormat.getCurrencyInstance()
 
     init {
-        format = NumberFormat.getCurrencyInstance()
-        format!!.currency = Currency.getInstance("USD")
+        format.currency = Currency.getInstance("USD")
     }
 
     fun format(amount: Int): String {
 
-        val bigDecimal: BigDecimal
-        if (amount != 0) {
-            bigDecimal = BigDecimal.valueOf(amount.toLong()).divide(HUNDRED)
+        val bigDecimal: BigDecimal = if (amount != 0) {
+            BigDecimal.valueOf(amount.toLong()).divide(HUNDRED)
         } else {
-            bigDecimal = BigDecimal.valueOf(amount.toLong())
+            BigDecimal.valueOf(amount.toLong())
         }
 
-        return format!!.format(bigDecimal)
+        return format.format(bigDecimal)
     }
 }

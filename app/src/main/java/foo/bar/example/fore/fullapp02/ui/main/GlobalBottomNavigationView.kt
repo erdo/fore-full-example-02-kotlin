@@ -20,9 +20,10 @@ import foo.bar.example.fore.fullapp02.ui.todolist.TodoListFragment
  *
  */
 class GlobalBottomNavigationView @JvmOverloads constructor(
-        context: Context?,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0) :
+    context: Context?,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) :
     BottomNavigationViewWithBadges(context, attrs, defStyleAttr), SyncableView {
 
     private val fruitCollectorModel: FruitCollectorModel by inject()
@@ -35,15 +36,24 @@ class GlobalBottomNavigationView @JvmOverloads constructor(
     private val itemSelectedListener = OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_fruit -> {
-                this@GlobalBottomNavigationView.setFragment(fruitCollectorFragment, FruitCollectorFragment::class.java.simpleName)
+                this@GlobalBottomNavigationView.setFragment(
+                    fruitCollectorFragment,
+                    FruitCollectorFragment::class.java.simpleName
+                )
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_basket -> {
-                this@GlobalBottomNavigationView.setFragment(basketFragment, BasketFragment::class.java.simpleName)
+                this@GlobalBottomNavigationView.setFragment(
+                    basketFragment,
+                    BasketFragment::class.java.simpleName
+                )
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_todo -> {
-                this@GlobalBottomNavigationView.setFragment(todoListFragment, TodoListFragment::class.java.simpleName)
+                this@GlobalBottomNavigationView.setFragment(
+                    todoListFragment,
+                    TodoListFragment::class.java.simpleName
+                )
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -57,7 +67,10 @@ class GlobalBottomNavigationView @JvmOverloads constructor(
     }
 
     private fun setFragment(fragment: Fragment, fragmentTag: String) {
-       (ViewUtils.getActivityFromContext(context) as MainActivity).setFragment(fragment, fragmentTag)
+        (ViewUtils.getActivityFromContext(context) as MainActivity).setFragment(
+            fragment,
+            fragmentTag
+        )
     }
 
     override fun syncView() {

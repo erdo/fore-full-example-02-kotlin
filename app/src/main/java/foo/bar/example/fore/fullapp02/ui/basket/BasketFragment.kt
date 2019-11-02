@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import co.early.fore.lifecycle.LifecycleSyncer
-import co.early.fore.lifecycle.fragment.SyncXFragment
+import co.early.fore.lifecycle.fragment.SyncFragmentX
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.basket.BasketModel
 import foo.bar.example.fore.fullapp02.ui.common.widget.NotImplementedDialog
@@ -15,10 +15,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 /**
- * For the basket example we manage fore observers at the **View** level
+ * For the basket example we manage fore observers at the **Fragment** level
  * [BasketView]
  */
-class BasketFragment : SyncXFragment() {
+class BasketFragment : SyncFragmentX() {
 
     //models that we need to sync with
     private val basketModel: BasketModel by viewModel()
@@ -52,8 +52,8 @@ class BasketFragment : SyncXFragment() {
             )
         }
 
-        basket_discount_checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
-            basketModel.isDiscountEnabled = isChecked
+        basket_discount_checkbox.setOnCheckedChangeListener { v, isChecked ->
+            basketModel.isDiscount = isChecked
         }
     }
 
@@ -65,7 +65,7 @@ class BasketFragment : SyncXFragment() {
         basket_remove_button.isEnabled = basketModel.numberOfItems > 0
         basket_total_text.text = MoneyFormatter.format(basketModel.totalCost)
         basket_discount_text.text = MoneyFormatter.format(basketModel.totalDiscount)
-        basket_discount_checkbox.isEnabled = basketModel.isDiscountEnabled
+        basket_discount_checkbox.isChecked = basketModel.isDiscount
         basket_checkout_button.isEnabled = basketModel.numberOfItems > 0
     }
 
@@ -76,7 +76,6 @@ class BasketFragment : SyncXFragment() {
     }
 
     companion object {
-
         fun newInstance(): BasketFragment {
             return BasketFragment()
         }

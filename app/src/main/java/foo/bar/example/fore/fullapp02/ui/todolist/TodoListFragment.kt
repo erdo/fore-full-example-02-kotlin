@@ -1,31 +1,22 @@
 package foo.bar.example.fore.fullapp02.ui.todolist
 
-import co.early.fore.lifecycle.LifecycleSyncer
-import co.early.fore.lifecycle.view.SyncViewXFragment
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import foo.bar.example.fore.fullapp02.R
-import foo.bar.example.fore.fullapp02.feature.todolist.TodoListExporter
-import foo.bar.example.fore.fullapp02.feature.todolist.TodoListModel
-import org.koin.android.ext.android.inject
 
 
-/**
- * For the todolist example we manage fore observers at the **Fragment** level
- * but we sync at the view level [SyncViewXFragment]
- */
-class TodoListFragment : SyncViewXFragment() {
+class TodoListFragment : Fragment() {
 
-    private val todoListModel: TodoListModel by inject()
-    private val todoListExporter: TodoListExporter by inject()
-
-    override fun getResourceIdForSyncableView(): Int {
-        return R.layout.fragment_todolist
-    }
-
-    override fun getThingsToObserve(): LifecycleSyncer.Observables {
-        return LifecycleSyncer.Observables(
-            todoListExporter,
-            todoListModel
-        )
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        return inflater.inflate(R.layout.fragment_todolist, null)
     }
 
     companion object {

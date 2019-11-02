@@ -110,7 +110,6 @@ class Authentication(
     }
 
     companion object {
-
         private val TAG = Authentication::class.java.simpleName
     }
 

@@ -37,7 +37,6 @@ class NotImplementedDialog : DialogFragment() {
     }
 
     companion object {
-
         fun newInstance(): NotImplementedDialog {
             return NotImplementedDialog()
         }

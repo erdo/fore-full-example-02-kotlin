@@ -12,9 +12,10 @@ import kotlinx.android.synthetic.main.common_navigation_badge.view.*
  * level, [TodoListFragment]
  */
 class BadgeView @JvmOverloads constructor(
-        context: Context?,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0) :
+    context: Context?,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) :
     RelativeLayout(context, attrs, defStyleAttr) {
 
     fun setText(charSequence: CharSequence) {

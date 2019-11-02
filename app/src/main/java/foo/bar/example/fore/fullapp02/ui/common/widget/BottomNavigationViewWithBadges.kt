@@ -13,9 +13,10 @@ import java.util.*
 
 
 open class BottomNavigationViewWithBadges @JvmOverloads constructor(
-        context: Context?,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0) :
+    context: Context?,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) :
     BottomNavigationView(context, attrs, defStyleAttr) {
 
     private val badges = ArrayList<BadgeView>()

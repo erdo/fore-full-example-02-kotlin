@@ -10,10 +10,12 @@ import foo.bar.example.fore.fullapp02.feature.fruitcollector.FruitCollectorModel
 import kotlinx.android.synthetic.main.fragment_fruitcollector_listitem.view.*
 
 
-class FruitCollectorAdapter(private val fruitCollectorModel: FruitCollectorModel) : ChangeAwareAdapter<FruitCollectorAdapter.ViewHolder>(fruitCollectorModel) {
+class FruitCollectorAdapter(private val fruitCollectorModel: FruitCollectorModel) :
+    ChangeAwareAdapter<FruitCollectorAdapter.ViewHolder>(fruitCollectorModel) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.fragment_fruitcollector_listitem, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.fragment_fruitcollector_listitem, parent, false)
         val holder = ViewHolder(view)
         holder.itemView.tag = holder
         return holder

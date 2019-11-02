@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import co.early.fore.adapters.ChangeAwareAdapter
 import co.early.fore.core.logging.Logger
 import foo.bar.example.fore.fullapp02.R
@@ -11,10 +12,12 @@ import foo.bar.example.fore.fullapp02.feature.todolist.TodoListModel
 import kotlinx.android.synthetic.main.fragment_todolist_listitem.view.*
 
 
-class TodoListAdapter(val todoListModel: TodoListModel, val logger: Logger) : ChangeAwareAdapter<TodoListAdapter.ViewHolder>(todoListModel) {
+class TodoListAdapter(private val todoListModel: TodoListModel, val logger: Logger) :
+    ChangeAwareAdapter<TodoListAdapter.ViewHolder>(todoListModel) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.fragment_todolist_listitem, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.fragment_todolist_listitem, parent, false)
         val holder = ViewHolder(view)
         holder.itemView.tag = holder
         return holder
@@ -26,12 +29,11 @@ class TodoListAdapter(val todoListModel: TodoListModel, val logger: Logger) : Ch
 
         holder.itemView.todolist_done_checkbox.isChecked = item.isDone
         holder.itemView.todolist_done_checkbox.setOnCheckedChangeListener { _, isChecked ->
-            //yuk, can't find a way around this, without checking
-            //here you will occasionally get outofindex errors
             //if you tap very fast on different rows removing them
-            //while you are using adapter animations
+            //while you are using adapter animations you will crash unless
+            //you check for this
             val betterPosition = holder.adapterPosition
-            if (betterPosition != -1) {
+            if (betterPosition != NO_POSITION) {
                 todoListModel.setDone(isChecked, betterPosition)
             }
         }

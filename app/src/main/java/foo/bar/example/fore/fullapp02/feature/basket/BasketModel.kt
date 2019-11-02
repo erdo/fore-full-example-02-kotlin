@@ -23,16 +23,15 @@ import java.util.*
  * more robust because of this). See here for more info
  * (https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k)
  */
-class BasketModel(logger: Logger, workMode: WorkMode) : ViewModel(),
+class BasketModel(private val logger: Logger, workMode: WorkMode) : ViewModel(),
     Observable by ObservableImp(workMode) {
-
 
     private val items = ArrayList<BasketItem>()
 
-
-    var isDiscountEnabled: Boolean = false
-        set(discountEnabled) {
-            field = discountEnabled
+    var isDiscount: Boolean = false
+        set(discountOn) {
+            field = discountOn
+            calculateCosts()
             notifyObservers()
         }
     val discountPercent = 10
@@ -63,7 +62,7 @@ class BasketModel(logger: Logger, workMode: WorkMode) : ViewModel(),
         return numberOfItems > 0
     }
 
-    fun calculateCosts() {
+    private fun calculateCosts() {
 
         totalCost = 0
         totalDiscount = 0
@@ -72,9 +71,9 @@ class BasketModel(logger: Logger, workMode: WorkMode) : ViewModel(),
             totalCost += basketItem.cost
         }
 
-        if (isDiscountEnabled) {
-            totalDiscount = if (isDiscountEnabled) totalCost * discountPercent / 100 else totalCost
-            totalCost = totalCost - totalDiscount
+        if (isDiscount) {
+            totalDiscount = if (isDiscount) totalCost * discountPercent / 100 else totalCost
+            totalCost -= totalDiscount
         }
     }
 }

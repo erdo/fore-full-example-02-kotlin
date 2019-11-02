@@ -5,39 +5,29 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import co.early.fore.lifecycle.LifecycleSyncer
-import co.early.fore.lifecycle.view.SyncViewXActivity
 import foo.bar.example.fore.fullapp02.R
-import foo.bar.example.fore.fullapp02.feature.fruitcollector.FruitCollectorModel
 import foo.bar.example.fore.fullapp02.feature.login.Authentication
 import foo.bar.example.fore.fullapp02.feature.permission.Permission
 import foo.bar.example.fore.fullapp02.feature.permission.PermissionReceiver
-import foo.bar.example.fore.fullapp02.feature.todolist.TodoListModel
 import foo.bar.example.fore.fullapp02.ui.login.LoginActivity
-import org.koin.android.ext.android.inject
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
 
-/**
- * For the tab content in this example we manage fore observers at the **Fragment** level,
- * However we still want the bottom navigation bar to be reactive, so we ask it to observe
- * a few models
- * here so that it can keep its badges in sync - SyncViewXActivity does most
- * of the leg work for us
- */
-
-class MainActivity : SyncViewXActivity(), PermissionReceiver by permission {
+class MainActivity : AppCompatActivity(), PermissionReceiver by permission {
 
     private val authentication: Authentication by inject()
-    private val todoListModel: TodoListModel by inject()
-    private val fruitCollectorModel: FruitCollectorModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupNavigation(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        if (savedInstanceState == null) {//set initial state of navigation
+            findViewById<MainView>(R.id.container).setSelectedItemId(R.id.navigation_fruit)
+        }
     }
 
 
@@ -53,33 +43,6 @@ class MainActivity : SyncViewXActivity(), PermissionReceiver by permission {
             fragmentTag
         )
         fragmentTransaction.commitAllowingStateLoss()
-    }
-
-    /**
-     * Navigation methods
-     */
-
-    private fun setupNavigation(savedInstanceState: Bundle?) {
-        if (savedInstanceState == null) {//set initial state of navigation
-            (syncableView as MainView).setSelectedItemId(R.id.navigation_fruit)
-        }
-    }
-
-    /**
-     * SyncableAppCompatActivity methods
-     */
-
-    override fun getResourceIdForSyncableView(): Int {
-        return R.layout.activity_main
-    }
-
-    override fun getThingsToObserve(): LifecycleSyncer.Observables {
-        return LifecycleSyncer.Observables(
-            fruitCollectorModel,
-            todoListModel
-            // note that we are not observing the basket model as it has been implemented
-            // as a locally scoped view model that doesn't exist when we are not on the basket view
-        )
     }
 
 

@@ -13,6 +13,7 @@ import co.early.fore.core.callbacks.FailureCallbackWithPayload
 import co.early.fore.core.callbacks.SuccessCallback
 import co.early.fore.core.ui.SyncTrigger
 import co.early.fore.lifecycle.LifecycleSyncer
+import co.early.fore.lifecycle.fragment.SyncFragmentX
 import co.early.fore.lifecycle.fragment.SyncXFragment
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.fruitcollector.FruitCollectorModel
@@ -26,7 +27,7 @@ import org.koin.android.ext.android.inject
  * For the basket example we manage fore observers at the **Fragment** level
  * using: [SyncXFragment]
  */
-class FruitCollectorFragment : SyncXFragment() {
+class FruitCollectorFragment : SyncFragmentX() {
 
     //models we need
     private val fruitCollectorModel: FruitCollectorModel by inject()
@@ -120,7 +121,14 @@ class FruitCollectorFragment : SyncXFragment() {
         winAnimation.duration = 700
 
         fetchingStartedSyncTrigger = SyncTrigger(SyncTrigger.DoThisWhenTriggered {
-            winAnimation.playTogether(ObjectAnimator.ofFloat(fruit_fetchingfruitmessage_txt, "alpha", 0f, 1f))
+            winAnimation.playTogether(
+                ObjectAnimator.ofFloat(
+                    fruit_fetchingfruitmessage_txt,
+                    "alpha",
+                    0f,
+                    1f
+                )
+            )
             winAnimation.start()
         }, SyncTrigger.CheckTriggerThreshold { fruitCollectorModel.anyNetworkThreadsBusy() })
 
@@ -128,7 +136,14 @@ class FruitCollectorFragment : SyncXFragment() {
             // temporarily make fetchingFruitMessage visible before we fade it, syncView() gets
             // called at the end of the animation anyway to put everything back to how it should be
             fruit_fetchingfruitmessage_txt.visibility = View.VISIBLE
-            winAnimation.playTogether(ObjectAnimator.ofFloat(fruit_fetchingfruitmessage_txt, "alpha", 1f, 0f))
+            winAnimation.playTogether(
+                ObjectAnimator.ofFloat(
+                    fruit_fetchingfruitmessage_txt,
+                    "alpha",
+                    1f,
+                    0f
+                )
+            )
             winAnimation.addListener(SyncerAnimationComplete(this))//onAnimationEnd() -> syncView()
             winAnimation.start()
         }, SyncTrigger.CheckTriggerThreshold { !fruitCollectorModel.anyNetworkThreadsBusy() })
@@ -140,13 +155,20 @@ class FruitCollectorFragment : SyncXFragment() {
 
     override fun syncView() {
 
-        fruit_go1_button.visibility = if (fruitCollectorModel.isBusy1) View.INVISIBLE else View.VISIBLE
-        fruit_busy1_prog.visibility = if (fruitCollectorModel.isBusy1) View.VISIBLE else View.INVISIBLE
-        fruit_go2_button.visibility = if (fruitCollectorModel.isBusy2) View.INVISIBLE else View.VISIBLE
-        fruit_busy2_prog.visibility = if (fruitCollectorModel.isBusy2) View.VISIBLE else View.INVISIBLE
-        fruit_go3_button.visibility = if (fruitCollectorModel.isBusy3) View.INVISIBLE else View.VISIBLE
-        fruit_busy3_prog.visibility = if (fruitCollectorModel.isBusy3) View.VISIBLE else View.INVISIBLE
-        fruit_fetchingfruitmessage_txt.visibility = if (fruitCollectorModel.anyNetworkThreadsBusy()) View.VISIBLE else View.INVISIBLE
+        fruit_go1_button.visibility =
+            if (fruitCollectorModel.isBusy1) View.INVISIBLE else View.VISIBLE
+        fruit_busy1_prog.visibility =
+            if (fruitCollectorModel.isBusy1) View.VISIBLE else View.INVISIBLE
+        fruit_go2_button.visibility =
+            if (fruitCollectorModel.isBusy2) View.INVISIBLE else View.VISIBLE
+        fruit_busy2_prog.visibility =
+            if (fruitCollectorModel.isBusy2) View.VISIBLE else View.INVISIBLE
+        fruit_go3_button.visibility =
+            if (fruitCollectorModel.isBusy3) View.INVISIBLE else View.VISIBLE
+        fruit_busy3_prog.visibility =
+            if (fruitCollectorModel.isBusy3) View.VISIBLE else View.INVISIBLE
+        fruit_fetchingfruitmessage_txt.visibility =
+            if (fruitCollectorModel.anyNetworkThreadsBusy()) View.VISIBLE else View.INVISIBLE
         fruit_clear_button.isEnabled = fruitCollectorModel.fruitListSize > 0
         fruit_totalcount_txt.text = "" + fruitCollectorModel.totalFruitCount
         fruit_totalcitruscount_txt.text = "" + fruitCollectorModel.totalCitrusFruitCount

@@ -25,11 +25,13 @@ import java.util.*
  *
  * (this class knows nothing about views, contexts, nor anything else to do with the android)
  */
-class FruitCollectorModel (private val fruitService: FruitService,
-                                              private val callProcessor: CallProcessor<UserMessage>,
-                                              private val systemTimeWrapper: SystemTimeWrapper,
-                                              private val workMode: WorkMode,
-                                              private val logger: Logger) : ObservableImp(workMode, logger), Updateable{
+class FruitCollectorModel(
+    private val fruitService: FruitService,
+    private val callProcessor: CallProcessor<UserMessage>,
+    private val systemTimeWrapper: SystemTimeWrapper,
+    private val workMode: WorkMode,
+    private val logger: Logger
+) : ObservableImp(workMode, logger), Updateable {
 
     private val fruitList: ChangeAwareList<Fruit>
 
@@ -50,7 +52,7 @@ class FruitCollectorModel (private val fruitService: FruitService,
 
 
     init {
-        fruitList = ChangeAwareArrayList(Affirm.notNull(systemTimeWrapper))
+        fruitList = ChangeAwareArrayList(systemTimeWrapper)
     }
 
     /**
@@ -59,7 +61,11 @@ class FruitCollectorModel (private val fruitService: FruitService,
      * same thing, feel free to ignore this method and skip down to fetchFruits() for something a
      * bit more normal.
      */
-    fun fetchFruits1(includeCitrusResults: Boolean, SuccessCallback: SuccessCallback, failureCallbackWithPayload: FailureCallbackWithPayload<UserMessage>) {
+    fun fetchFruits1(
+        includeCitrusResults: Boolean,
+        SuccessCallback: SuccessCallback,
+        failureCallbackWithPayload: FailureCallbackWithPayload<UserMessage>
+    ) {
 
         logger.i(TAG, "fetchFruits() 1 includeCitrus:" + includeCitrusResults)
 
@@ -81,7 +87,11 @@ class FruitCollectorModel (private val fruitService: FruitService,
      * same thing, feel free to ignore this method and skip down to fetchFruits() for something a
      * bit more normal.
      */
-    fun fetchFruits2(includeCitrusResults: Boolean, SuccessCallback: SuccessCallback, failureCallbackWithPayload: FailureCallbackWithPayload<UserMessage>) {
+    fun fetchFruits2(
+        includeCitrusResults: Boolean,
+        SuccessCallback: SuccessCallback,
+        failureCallbackWithPayload: FailureCallbackWithPayload<UserMessage>
+    ) {
 
         logger.i(TAG, "fetchFruits() 2 includeCitrus:" + includeCitrusResults)
 
@@ -103,7 +113,11 @@ class FruitCollectorModel (private val fruitService: FruitService,
      * same thing, feel free to ignore this method and skip down to fetchFruits() for something a
      * bit more normal.
      */
-    fun fetchFruits3(includeCitrusResults: Boolean, SuccessCallback: SuccessCallback, failureCallbackWithPayload: FailureCallbackWithPayload<UserMessage>) {
+    fun fetchFruits3(
+        includeCitrusResults: Boolean,
+        SuccessCallback: SuccessCallback,
+        failureCallbackWithPayload: FailureCallbackWithPayload<UserMessage>
+    ) {
 
         logger.i(TAG, "fetchFruits() 3 includeCitrus:" + includeCitrusResults)
 
@@ -121,9 +135,9 @@ class FruitCollectorModel (private val fruitService: FruitService,
 
 
     private fun fetchFruits(
-            busy: Busy, includeCitrusResults: Boolean,
-            SuccessCallback: SuccessCallback,
-            failureCallbackWithPayload: FailureCallbackWithPayload<UserMessage>
+        busy: Busy, includeCitrusResults: Boolean,
+        SuccessCallback: SuccessCallback,
+        failureCallbackWithPayload: FailureCallbackWithPayload<UserMessage>
     ) {
 
         logger.i(TAG, "fetchFruits()")
@@ -142,17 +156,24 @@ class FruitCollectorModel (private val fruitService: FruitService,
         // this is the network call, CallProcessor handles a lot of the complication
         // and lets us mock network calls during tests
         callProcessor.processCall(fruitService.getFruits("3s"), workMode,
-                                  { successResponse -> handleSuccess(busy, includeCitrusResults, SuccessCallback, successResponse) }
+            { successResponse ->
+                handleSuccess(
+                    busy,
+                    includeCitrusResults,
+                    SuccessCallback,
+                    successResponse
+                )
+            }
         ) { failureMessage -> handleFailure(busy, failureCallbackWithPayload, failureMessage) }
 
     }
 
     private fun handleSuccess(
-            busy: Busy, includeCitrus: Boolean,
-            SuccessCallback: SuccessCallback, successResponse: List<FruitPojo>
+        busy: Busy, includeCitrus: Boolean,
+        SuccessCallback: SuccessCallback, successResponse: List<FruitPojo>
     ) {
 
-        var fruits: MutableList<Fruit> = ArrayList()
+        val fruits: MutableList<Fruit> = ArrayList()
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
 
@@ -168,11 +189,11 @@ class FruitCollectorModel (private val fruitService: FruitService,
 
             //kotlin version to filter out citrus fruits
             fruits.addAll(successResponse
-                              .filter { fruitPojo -> includeCitrus || !fruitPojo.isCitrus }
-                              .map { fruitPojo ->
-                                  countNewFruit(fruitPojo.isCitrus)
-                                  Fruit(fruitPojo)
-                              })
+                .filter { fruitPojo -> includeCitrus || !fruitPojo.isCitrus }
+                .map { fruitPojo ->
+                    countNewFruit(fruitPojo.isCitrus)
+                    Fruit(fruitPojo)
+                })
         }
 
         fruitList.addAll(0, fruits)
@@ -188,8 +209,8 @@ class FruitCollectorModel (private val fruitService: FruitService,
     }
 
     private fun handleFailure(
-            busy: Busy, failureCallbackWithPayload: FailureCallbackWithPayload<UserMessage>,
-            failureMessage: UserMessage
+        busy: Busy, failureCallbackWithPayload: FailureCallbackWithPayload<UserMessage>,
+        failureMessage: UserMessage
     ) {
         failureCallbackWithPayload.fail(failureMessage)
         complete(busy)
@@ -211,7 +232,7 @@ class FruitCollectorModel (private val fruitService: FruitService,
         val fruitToRemove = getFruit(index)
 
         totalFruitCount--
-        totalCitrusFruitCount = totalCitrusFruitCount - if (fruitToRemove.isCitrus) 1 else 0
+        totalCitrusFruitCount -= if (fruitToRemove.isCitrus) 1 else 0
 
         fruitList.removeAt(index)
         notifyObservers()

@@ -8,12 +8,13 @@ import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.view.inputmethod.InputMethodManager
-import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import co.early.fore.core.logging.Logger
 import co.early.fore.core.ui.SyncableView
+import co.early.fore.lifecycle.LifecycleSyncer
+import co.early.fore.lifecycle.view.SyncRelativeLayout
 import co.early.fore.lifecycle.view.SyncViewXFragment
 import foo.bar.example.fore.fullapp02.feature.permission.Permission
 import foo.bar.example.fore.fullapp02.feature.todolist.TodoItem
@@ -34,7 +35,7 @@ class TodoListView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) :
-    RelativeLayout(context, attrs, defStyleAttr), SyncableView {
+    SyncRelativeLayout(context, attrs, defStyleAttr), SyncableView {
 
     //models that we need
     private val todoListModel: TodoListModel by inject()
@@ -42,6 +43,7 @@ class TodoListView @JvmOverloads constructor(
     private val permission: Permission by inject()
     private val todoListExporter: TodoListExporter by inject()
 
+    //ui bits
     private lateinit var todoListAdapter: TodoListAdapter
     private lateinit var animationSet: AnimatorSet
     private lateinit var keyboard: InputMethodManager
@@ -191,7 +193,14 @@ class TodoListView @JvmOverloads constructor(
     }
 
 
-//data binding stuff below
+    //data binding stuff below
+
+    override fun getThingsToObserve(): LifecycleSyncer.Observables {
+        return LifecycleSyncer.Observables(
+            todoListExporter,
+            todoListModel
+        )
+    }
 
     override fun syncView() {
         todo_create_button.isEnabled =

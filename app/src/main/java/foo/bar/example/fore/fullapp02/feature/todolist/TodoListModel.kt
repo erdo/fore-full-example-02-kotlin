@@ -45,7 +45,7 @@ class TodoListModel(systemTimeWrapper: SystemTimeWrapper, logger: Logger) :
             displayList.add(todoItem)
         }
 
-        itemsNotYetDone = itemsNotYetDone + if (todoItem.isDone) 0 else 1
+        itemsNotYetDone += if (todoItem.isDone) 0 else 1
 
         notifyObservers()
     }
@@ -54,7 +54,7 @@ class TodoListModel(systemTimeWrapper: SystemTimeWrapper, logger: Logger) :
         val removedItem = todoList.removeAt(Affirm.notNull(index))
         displayList.remove(removedItem)
 
-        itemsNotYetDone = itemsNotYetDone - if (removedItem.isDone) 0 else 1
+        itemsNotYetDone -= if (removedItem.isDone) 0 else 1
 
         notifyObservers()
     }
@@ -144,4 +144,7 @@ class TodoListModel(systemTimeWrapper: SystemTimeWrapper, logger: Logger) :
             }
         }
     }
+
 }
+
+

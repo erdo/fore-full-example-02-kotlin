@@ -6,7 +6,8 @@ import co.early.fore.core.ui.SyncableView
 /**
  *
  */
-class SyncerCheckChanged(private val syncableView: SyncableView) : CompoundButton.OnCheckedChangeListener {
+class SyncerCheckChanged(private val syncableView: SyncableView) :
+    CompoundButton.OnCheckedChangeListener {
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
         syncableView.syncView()
     }

@@ -150,11 +150,9 @@ class Permission(
         logger.i(LOG_TAG, "permissionRequest() for " + permissionTypes.size + " permissions")
 
         //check if the activity implements the correct interface
-        if (activity !is PermissionReceiver) {
-            throw  IllegalArgumentException(
-                "activity must implement PermissionReceiver, adding a delegate " +
-                        "to a Permissions instance is the easiest method, see docs"
-            )
+        require(activity is PermissionReceiver) {
+            "activity must implement PermissionReceiver, adding a delegate " +
+                    "to a Permissions instance is the easiest method, see docs"
         }
 
         //check if we already have all of these permissions anyway
@@ -273,11 +271,11 @@ class Permission(
     companion object {
 
         private val LOG_TAG = Permission::class.java.simpleName
-        private val SPACER = "-- "
-        private val REQUEST_CODE = 4242
+        private const val SPACER = "-- "
+        private const val REQUEST_CODE = 4242
         // If the permission gets denied this quick, then it implies that the user has selected the
         // "Never Ask Again" check box on the permissions request
-        private val AUTOMATICALLY_DENIED_WINDOW_MS: Long = 500
+        private const val AUTOMATICALLY_DENIED_WINDOW_MS: Long = 500
     }
 
 }
