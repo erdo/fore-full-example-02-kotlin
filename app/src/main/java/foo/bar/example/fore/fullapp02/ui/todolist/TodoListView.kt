@@ -2,27 +2,24 @@ package foo.bar.example.fore.fullapp02.ui.todolist
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import co.early.fore.core.logging.Logger
 import co.early.fore.core.ui.SyncableView
 import co.early.fore.lifecycle.LifecycleSyncer
 import co.early.fore.lifecycle.view.SyncRelativeLayout
-import co.early.fore.lifecycle.view.SyncViewXFragment
 import foo.bar.example.fore.fullapp02.feature.permission.Permission
 import foo.bar.example.fore.fullapp02.feature.todolist.TodoItem
-import foo.bar.example.fore.fullapp02.feature.todolist.TodoListExporter
 import foo.bar.example.fore.fullapp02.feature.todolist.TodoListModel
-import foo.bar.example.fore.fullapp02.message.UserMessage
 import foo.bar.example.fore.fullapp02.ui.common.uiutils.SyncerTextWatcher
 import foo.bar.example.fore.fullapp02.ui.common.uiutils.inject
+import foo.bar.example.fore.fullapp02.ui.common.widget.NotImplementedDialog
+import foo.bar.example.fore.fullapp02.ui.main.MainActivity
 import kotlinx.android.synthetic.main.fragment_todolist.view.*
 
 
@@ -41,7 +38,6 @@ class TodoListView @JvmOverloads constructor(
     private val todoListModel: TodoListModel by inject()
     private val logger: Logger by inject()
     private val permission: Permission by inject()
-    private val todoListExporter: TodoListExporter by inject()
 
     //ui bits
     private lateinit var todoListAdapter: TodoListAdapter
@@ -71,48 +67,54 @@ class TodoListView @JvmOverloads constructor(
 
         todo_clear_button.setOnClickListener { todoListModel.clear() }
 
-        todo_showdone_switch.setOnCheckedChangeListener { buttonView, isChecked ->
+        todo_showdone_switch.setOnCheckedChangeListener { _, isChecked ->
             todoListModel.setDisplayDoneItems(
                 isChecked
             )
         }
 
-        todo_export_button.setOnClickListener { v ->
-            permission.permissionRequest(
-                (context as Activity),
-                {
-                    todoListExporter.exportCurrentTodoList(
-                        {
-                            Toast.makeText(
-                                context,
-                                "Export complete",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        },
-                        { failureMessage ->
-                            Toast.makeText(
-                                context,
-                                failureMessage.messageResId,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    )
-                },
-                {
-                    Toast.makeText(
-                        context,
-                        UserMessage.ERROR_PERMISSION_DENIED.messageResId,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                },
-                { permission.permissionShowAppSettingsScreen(context) },
-                Permission.Type.WRITE_EXTERNAL_STORAGE
-            )
+        todo_export_button.setOnClickListener {
+
+            (context as MainActivity).supportFragmentManager.let {
+                NotImplementedDialog.newInstance().show(it, NotImplementedDialog::class.java.simpleName)
+            }
+
+// we took the java based exporting code out for the moment, re-writing to kotlin
+//            permission.permissionRequest(
+//                (context as Activity),
+//                {
+//                    todoListExporter.exportCurrentTodoList(
+//                        {
+//                            Toast.makeText(
+//                                context,
+//                                "Export complete",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        },
+//                        { failureMessage ->
+//                            Toast.makeText(
+//                                context,
+//                                failureMessage.messageResId,
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        }
+//                    )
+//                },
+//                {
+//                    Toast.makeText(
+//                        context,
+//                        UserMessage.ERROR_PERMISSION_DENIED.messageResId,
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                },
+//                { permission.permissionShowAppSettingsScreen(context) },
+//                Permission.Type.WRITE_EXTERNAL_STORAGE
+//            )
         }
 
         todo_description_edit.addTextChangedListener(SyncerTextWatcher(this))
         todo_description_edit.setOnEditorActionListener()
-        { v, actionId, event ->
+        { _, actionId, event ->
             if (actionId == IME_ACTION_DONE || event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
                 this@TodoListView.addItem()
                 true
@@ -197,7 +199,7 @@ class TodoListView @JvmOverloads constructor(
 
     override fun getThingsToObserve(): LifecycleSyncer.Observables {
         return LifecycleSyncer.Observables(
-            todoListExporter,
+            //todoListExporter,
             todoListModel
         )
     }
@@ -207,7 +209,7 @@ class TodoListView @JvmOverloads constructor(
             todoListModel.isValidItemDescription(todo_description_edit.text.toString())
         todo_showdone_switch.isChecked = todoListModel.displayDoneItems()
         todo_clear_button.isEnabled = todoListModel.hasAnyItems()
-        todo_export_button.isEnabled = !todoListExporter.isBusy
+        //todo_export_button.isEnabled = !todoListExporter.isBusy
         todoListAdapter.notifyDataSetChangedAuto()
     }
 }

@@ -2,8 +2,8 @@ package foo.bar.example.fore.fullapp02.feature.permission
 
 import android.app.Activity
 import android.content.Context
-import foo.bar.example.fore.fullapp02.utils.Failure
-import foo.bar.example.fore.fullapp02.utils.Success
+import co.early.fore.kt.core.callbacks.Failure
+import co.early.fore.kt.core.callbacks.Success
 
 /**
  *

@@ -9,9 +9,9 @@ import android.net.Uri
 import android.provider.Settings
 import co.early.fore.core.logging.Logger
 import co.early.fore.core.time.SystemTimeWrapper
+import co.early.fore.kt.core.callbacks.Failure
+import co.early.fore.kt.core.callbacks.Success
 import foo.bar.example.fore.fullapp02.App
-import foo.bar.example.fore.fullapp02.utils.Failure
-import foo.bar.example.fore.fullapp02.utils.Success
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.qualifier.Qualifier

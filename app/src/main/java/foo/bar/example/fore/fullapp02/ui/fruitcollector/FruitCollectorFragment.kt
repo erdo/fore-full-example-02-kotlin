@@ -9,12 +9,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import co.early.fore.core.callbacks.FailureCallbackWithPayload
-import co.early.fore.core.callbacks.SuccessCallback
 import co.early.fore.core.ui.SyncTrigger
 import co.early.fore.lifecycle.LifecycleSyncer
 import co.early.fore.lifecycle.fragment.SyncFragmentX
-import co.early.fore.lifecycle.fragment.SyncXFragment
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.fruitcollector.FruitCollectorModel
 import foo.bar.example.fore.fullapp02.message.UserMessage
@@ -64,8 +61,8 @@ class FruitCollectorFragment : SyncFragmentX() {
         fruit_go1_button.setOnClickListener {
             fruitCollectorModel.fetchFruits1(
                 !fruit_citrus1_switch.isChecked,
-                SuccessCallback { },
-                FailureCallbackWithPayload { failureMessage ->
+                { },
+                { failureMessage ->
                     Toast.makeText(
                         context,
                         "Fetch 1 Failed, reason:" + failureMessage,
@@ -77,8 +74,8 @@ class FruitCollectorFragment : SyncFragmentX() {
         fruit_go2_button.setOnClickListener {
             fruitCollectorModel.fetchFruits2(
                 !fruit_citrus2_switch.isChecked,
-                SuccessCallback { },
-                FailureCallbackWithPayload { failureMessage: UserMessage ->
+                { },
+                { failureMessage: UserMessage ->
                     Toast.makeText(
                         context,
                         "Fetch 2 Failed, reason:" + failureMessage,
@@ -90,8 +87,8 @@ class FruitCollectorFragment : SyncFragmentX() {
         fruit_go3_button.setOnClickListener {
             fruitCollectorModel.fetchFruits3(
                 !fruit_citrus3_switch.isChecked,
-                SuccessCallback { },
-                FailureCallbackWithPayload { failureMessage: UserMessage ->
+                { },
+                { failureMessage: UserMessage ->
                     Toast.makeText(
                         context,
                         "Fetch 3 Failed, reason:" + failureMessage,

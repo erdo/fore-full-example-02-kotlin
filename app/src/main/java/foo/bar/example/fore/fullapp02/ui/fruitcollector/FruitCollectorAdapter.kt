@@ -28,7 +28,7 @@ class FruitCollectorAdapter(private val fruitCollectorModel: FruitCollectorModel
         holder.itemView.setBackgroundResource(if (item.isCitrus) R.color.colorYellow else R.color.colorPrimary)
         holder.itemView.fruititem_letter_text.text = "" + item.firstLetterUpperCase
         holder.itemView.fruititem_name_text.text = "" + item.name
-        holder.itemView.fruititem_remove_button.setOnClickListener { v ->
+        holder.itemView.fruititem_remove_button.setOnClickListener {
             val betterPosition = holder.adapterPosition
             if (betterPosition != -1) {
                 fruitCollectorModel.removeFruit(betterPosition)

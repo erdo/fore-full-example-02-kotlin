@@ -2,18 +2,21 @@ package foo.bar.example.fore.fullapp02.feature.fruitcollector
 
 
 import android.os.Build
+import arrow.core.Either
 import co.early.fore.adapters.ChangeAwareArrayList
 import co.early.fore.adapters.ChangeAwareList
 import co.early.fore.adapters.UpdateSpec
 import co.early.fore.adapters.Updateable
 import co.early.fore.core.Affirm
 import co.early.fore.core.WorkMode
-import co.early.fore.core.callbacks.FailureCallbackWithPayload
-import co.early.fore.core.callbacks.SuccessCallback
 import co.early.fore.core.logging.Logger
-import co.early.fore.core.observer.ObservableImp
+import co.early.fore.core.observer.Observable
 import co.early.fore.core.time.SystemTimeWrapper
-import co.early.fore.retrofit.CallProcessor
+import co.early.fore.kt.core.callbacks.FailureWithPayload
+import co.early.fore.kt.core.callbacks.Success
+import co.early.fore.kt.core.coroutine.launchMain
+import co.early.fore.kt.core.observer.ObservableImp
+import co.early.fore.kt.retrofit.CallProcessor
 import foo.bar.example.fore.fullapp02.api.fruits.FruitPojo
 import foo.bar.example.fore.fullapp02.api.fruits.FruitService
 import foo.bar.example.fore.fullapp02.message.UserMessage
@@ -31,7 +34,7 @@ class FruitCollectorModel(
     private val systemTimeWrapper: SystemTimeWrapper,
     private val workMode: WorkMode,
     private val logger: Logger
-) : ObservableImp(workMode, logger), Updateable {
+) : Observable by ObservableImp(workMode), Updateable {
 
     private val fruitList: ChangeAwareList<Fruit>
 
@@ -63,8 +66,8 @@ class FruitCollectorModel(
      */
     fun fetchFruits1(
         includeCitrusResults: Boolean,
-        SuccessCallback: SuccessCallback,
-        failureCallbackWithPayload: FailureCallbackWithPayload<UserMessage>
+        success: Success,
+        failureWithPayload: FailureWithPayload<UserMessage>
     ) {
 
         logger.i(TAG, "fetchFruits() 1 includeCitrus:" + includeCitrusResults)
@@ -77,7 +80,7 @@ class FruitCollectorModel(
                 set(busy) {
                     isBusy1 = busy
                 }
-        }, includeCitrusResults, SuccessCallback, failureCallbackWithPayload)
+        }, includeCitrusResults, success, failureWithPayload)
 
     }
 
@@ -89,8 +92,8 @@ class FruitCollectorModel(
      */
     fun fetchFruits2(
         includeCitrusResults: Boolean,
-        SuccessCallback: SuccessCallback,
-        failureCallbackWithPayload: FailureCallbackWithPayload<UserMessage>
+        success: Success,
+        failureWithPayload: FailureWithPayload<UserMessage>
     ) {
 
         logger.i(TAG, "fetchFruits() 2 includeCitrus:" + includeCitrusResults)
@@ -103,7 +106,7 @@ class FruitCollectorModel(
                 set(busy) {
                     isBusy2 = busy
                 }
-        }, includeCitrusResults, SuccessCallback, failureCallbackWithPayload)
+        }, includeCitrusResults, success, failureWithPayload)
 
     }
 
@@ -115,8 +118,8 @@ class FruitCollectorModel(
      */
     fun fetchFruits3(
         includeCitrusResults: Boolean,
-        SuccessCallback: SuccessCallback,
-        failureCallbackWithPayload: FailureCallbackWithPayload<UserMessage>
+        success: Success,
+        failureWithPayload: FailureWithPayload<UserMessage>
     ) {
 
         logger.i(TAG, "fetchFruits() 3 includeCitrus:" + includeCitrusResults)
@@ -129,48 +132,51 @@ class FruitCollectorModel(
                 set(busy) {
                     isBusy3 = busy
                 }
-        }, includeCitrusResults, SuccessCallback, failureCallbackWithPayload)
+        }, includeCitrusResults, success, failureWithPayload)
 
     }
 
 
     private fun fetchFruits(
         busy: Busy, includeCitrusResults: Boolean,
-        SuccessCallback: SuccessCallback,
-        failureCallbackWithPayload: FailureCallbackWithPayload<UserMessage>
+        success: Success,
+        failureWithPayload: FailureWithPayload<UserMessage>
     ) {
 
         logger.i(TAG, "fetchFruits()")
 
-        Affirm.notNull(SuccessCallback)
-        Affirm.notNull(failureCallbackWithPayload)
-
         if (busy.isBusy) {
-            failureCallbackWithPayload.fail(UserMessage.ERROR_BUSY)
+            failureWithPayload(UserMessage.ERROR_BUSY)
             return
         }
 
         busy.isBusy = true
         notifyObservers()
 
-        // this is the network call, CallProcessor handles a lot of the complication
-        // and lets us mock network calls during tests
-        callProcessor.processCall(fruitService.getFruits("3s"), workMode,
-            { successResponse ->
-                handleSuccess(
+        launchMain(workMode) {
+
+            // this is the network call, CallProcessor handles a lot of the complication
+            // and lets us mock network calls during tests
+            val result = callProcessor.processCallAwait {
+                fruitService.getFruits("3s")
+            }
+
+            when (result) {
+                is Either.Left -> handleFailure(busy, failureWithPayload, result.a)
+                is Either.Right -> handleSuccess(
                     busy,
                     includeCitrusResults,
-                    SuccessCallback,
-                    successResponse
+                    success,
+                    result.b
                 )
             }
-        ) { failureMessage -> handleFailure(busy, failureCallbackWithPayload, failureMessage) }
+        }
 
     }
 
     private fun handleSuccess(
         busy: Busy, includeCitrus: Boolean,
-        SuccessCallback: SuccessCallback, successResponse: List<FruitPojo>
+        success: Success, successResponse: List<FruitPojo>
     ) {
 
         val fruits: MutableList<Fruit> = ArrayList()
@@ -197,7 +203,7 @@ class FruitCollectorModel(
         }
 
         fruitList.addAll(0, fruits)
-        SuccessCallback.success()
+        success()
         complete(busy)
     }
 
@@ -209,10 +215,10 @@ class FruitCollectorModel(
     }
 
     private fun handleFailure(
-        busy: Busy, failureCallbackWithPayload: FailureCallbackWithPayload<UserMessage>,
+        busy: Busy, failureWithPayload: FailureWithPayload<UserMessage>,
         failureMessage: UserMessage
     ) {
-        failureCallbackWithPayload.fail(failureMessage)
+        failureWithPayload(failureMessage)
         complete(busy)
     }
 
