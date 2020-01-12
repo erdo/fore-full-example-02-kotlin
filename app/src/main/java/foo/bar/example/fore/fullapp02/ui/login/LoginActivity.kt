@@ -7,12 +7,9 @@ import android.text.InputType
 import android.view.View
 import android.widget.ScrollView
 import android.widget.Toast
-import co.early.fore.core.callbacks.FailureCallbackWithPayload
-import co.early.fore.core.callbacks.SuccessCallback
 import co.early.fore.core.logging.Logger
 import co.early.fore.lifecycle.LifecycleSyncer
 import co.early.fore.lifecycle.activity.SyncActivityX
-import co.early.fore.lifecycle.activity.SyncXActivity
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.login.Authentication
 import foo.bar.example.fore.fullapp02.ui.common.uiutils.SyncerCheckChanged
@@ -55,11 +52,11 @@ class LoginActivity : SyncActivityX() {
 
             authentication.login(
                 emailStr, passwordStr,
-                successCallback = SuccessCallback {
+                success = {
                     MainActivity.start(this)
                     ViewUtils.getActivityFromContext(this)?.finish()
                 },
-                failureCallbackWithPayload = FailureCallbackWithPayload { failureMessage ->
+                failureWithPayload = { failureMessage ->
                     Toast.makeText(
                         this,
                         "Login Failed, reason:" + failureMessage,
@@ -70,7 +67,7 @@ class LoginActivity : SyncActivityX() {
 
         login_email_edittext.addTextChangedListener(SyncerTextWatcher(this))
         login_password_edittext.addTextChangedListener(SyncerTextWatcher(this))
-        login_password_edittext.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+        login_password_edittext.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {//just helps with small screens that can't see the login button properly
                 login_container_scrollview.fullScroll(ScrollView.FOCUS_DOWN)
             }

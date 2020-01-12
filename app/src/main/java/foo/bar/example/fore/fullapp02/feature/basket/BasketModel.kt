@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import co.early.fore.core.WorkMode
 import co.early.fore.core.logging.Logger
 import co.early.fore.core.observer.Observable
-import co.early.fore.core.observer.ObservableImp
+import co.early.fore.kt.core.observer.ObservableImp
 import java.util.*
 
 
@@ -14,7 +14,8 @@ import java.util.*
  * This time we extend android's ViewModel
  *
  * We added a Logger parameter to show how
- * ViewModelProvider.Factory works
+ * ViewModelProvider.Factory works, but as we're using
+ * koin for DI we don't even need to worry about the factory
  *
  * Apart from that change, the model is written in the same as all the others.
  *

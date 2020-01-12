@@ -17,18 +17,19 @@ import java.io.UnsupportedEncodingException
  */
 class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<UserMessage> {
 
+
     override fun <CE : MessageProvider<UserMessage>> handleError(
         t: Throwable?,
         errorResponse: Response<*>?,
         customErrorClazz: Class<CE>?,
-        originalRequest: Request
+        originalRequest: Request?
     ): UserMessage {
 
         var message = ERROR_MISC
 
         if (errorResponse != null) {
 
-            logWrapper.e(TAG, "handleError() HTTP:" + errorResponse.code())
+            logWrapper.e(LOG_TAG, "handleError() HTTP:" + errorResponse.code())
 
             when (errorResponse.code()) {
 
@@ -36,8 +37,8 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Us
 
                 400, 405 -> message = ERROR_CLIENT
 
-                404//realise this is officially a "client" error, but in my experience this is usually the fault of the server ;)
-                    , 500, 503 -> message = ERROR_SERVER
+                //realise 404 is officially a "client" error, but in my experience if it happens in prod it is usually the fault of the server ;)
+                404, 500, 503 -> message = ERROR_SERVER
             }
 
             if (customErrorClazz != null) {
@@ -47,22 +48,21 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Us
 
         } else {//non HTTP error, probably some connection problem, but might be JSON parsing related also
 
-            logWrapper.e(TAG, "handleError() throwable")
+            logWrapper.e(LOG_TAG, "handleError() throwable:$t")
 
             if (t != null) {
 
-                logWrapper.e(TAG, "throwable:$t")
-
-                if (t is com.google.gson.stream.MalformedJsonException) {
-                    message = ERROR_SERVER
-                } else {
-                    message = ERROR_NETWORK
+                message = when (t) {
+                    is com.google.gson.stream.MalformedJsonException -> ERROR_SERVER
+                    is java.net.UnknownServiceException -> ERROR_SECURITY_UNKNOWN
+                    else -> ERROR_NETWORK
                 }
                 t.printStackTrace()
             }
         }
 
-        logWrapper.e(TAG, "handleError() returning:" + message)
+
+        logWrapper.e(LOG_TAG, "handleError() returning:$message")
 
         return message
     }
@@ -79,18 +79,15 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Us
         var customError: CE? = null
 
         try {
-            customError = gson.fromJson(
-                InputStreamReader(errorResponse.errorBody().byteStream(), "UTF-8"),
-                customErrorClazz
-            )
+            customError = gson.fromJson(InputStreamReader(errorResponse.errorBody()!!.byteStream(), "UTF-8"), customErrorClazz)
         } catch (e: UnsupportedEncodingException) {
-            logWrapper.e(TAG, "parseCustomError() No more error details", e)
+            logWrapper.e(LOG_TAG, "parseCustomError() No more error details", e)
         } catch (e: IllegalStateException) {
-            logWrapper.e(TAG, "parseCustomError() No more error details", e)
+            logWrapper.e(LOG_TAG, "parseCustomError() No more error details", e)
         } catch (e: NullPointerException) {
-            logWrapper.e(TAG, "parseCustomError() No more error details", e)
+            logWrapper.e(LOG_TAG, "parseCustomError() No more error details", e)
         } catch (e: com.google.gson.JsonSyntaxException) {//the server probably gave us something that is not JSON
-            logWrapper.e(TAG, "parseCustomError() Problem parsing customServerError", e)
+            logWrapper.e(LOG_TAG, "parseCustomError() Problem parsing customServerError", e)
             return ERROR_SERVER
         }
 
@@ -102,6 +99,6 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Us
     }
 
     companion object {
-        private val TAG = CustomGlobalErrorHandler::class.java.simpleName
+        private val LOG_TAG = CustomGlobalErrorHandler::class.java.simpleName
     }
 }

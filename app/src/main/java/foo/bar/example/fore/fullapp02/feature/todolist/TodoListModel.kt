@@ -7,9 +7,9 @@ import co.early.fore.adapters.Updateable
 import co.early.fore.core.Affirm
 import co.early.fore.core.WorkMode
 import co.early.fore.core.logging.Logger
-import co.early.fore.core.observer.ObservableImp
+import co.early.fore.core.observer.Observable
 import co.early.fore.core.time.SystemTimeWrapper
-import java.util.*
+import co.early.fore.kt.core.observer.ObservableImp
 
 /**
  * All the unit testable logic and data for our todolist
@@ -21,7 +21,7 @@ import java.util.*
  * - we also implement Iterable as this make it nice and easy when we come to export the data
  */
 class TodoListModel(systemTimeWrapper: SystemTimeWrapper, logger: Logger) :
-    ObservableImp(WorkMode.SYNCHRONOUS, logger),
+    Observable by ObservableImp(WorkMode.SYNCHRONOUS),
     Updateable, Iterable<TodoItem> {
 
     //list of all items, including the ones that are done

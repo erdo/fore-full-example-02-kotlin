@@ -41,18 +41,18 @@ class BasketFragment : SyncFragmentX() {
 
     private fun setupButtonClickListeners() {
 
-        basket_add_button.setOnClickListener { v -> basketModel.addItem() }
+        basket_add_button.setOnClickListener { basketModel.addItem() }
 
-        basket_remove_button.setOnClickListener { v -> basketModel.removeItem() }
+        basket_remove_button.setOnClickListener { basketModel.removeItem() }
 
-        basket_checkout_button.setOnClickListener { v ->
+        basket_checkout_button.setOnClickListener {
             NotImplementedDialog.newInstance().show(
                 requireFragmentManager(),
                 NotImplementedDialog::class.java.simpleName
             )
         }
 
-        basket_discount_checkbox.setOnCheckedChangeListener { v, isChecked ->
+        basket_discount_checkbox.setOnCheckedChangeListener { _, isChecked ->
             basketModel.isDiscount = isChecked
         }
     }

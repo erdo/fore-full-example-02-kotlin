@@ -15,6 +15,7 @@ enum class UserMessage constructor(val messageResId: Int) : Parcelable {
 
     ERROR_MISC(R.string.msg_error_misc),
     ERROR_NETWORK(R.string.msg_error_network),
+    ERROR_SECURITY_UNKNOWN(R.string.msg_error_network),
     ERROR_SERVER(R.string.msg_error_server),
     ERROR_CLIENT(R.string.msg_error_client),
     ERROR_SESSION_TIMED_OUT(R.string.msg_error_session_timeout),
