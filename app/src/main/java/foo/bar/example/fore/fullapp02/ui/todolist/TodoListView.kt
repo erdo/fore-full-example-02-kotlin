@@ -9,7 +9,7 @@ import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import co.early.fore.core.logging.Logger
+import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.ui.SyncableView
 import co.early.fore.lifecycle.LifecycleSyncer
 import co.early.fore.lifecycle.view.SyncRelativeLayout

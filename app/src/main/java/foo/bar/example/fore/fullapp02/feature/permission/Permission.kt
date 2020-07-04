@@ -7,7 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
-import co.early.fore.core.logging.Logger
+import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.kt.core.callbacks.Failure
 import co.early.fore.kt.core.callbacks.Success

@@ -2,7 +2,7 @@ package foo.bar.example.fore.fullapp02.feature.login
 
 import arrow.core.Either
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.Logger
+import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success

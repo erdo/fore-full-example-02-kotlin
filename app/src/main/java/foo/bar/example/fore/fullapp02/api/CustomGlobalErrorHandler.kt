@@ -1,6 +1,6 @@
 package foo.bar.example.fore.fullapp02.api
 
-import co.early.fore.core.logging.Logger
+import co.early.fore.kt.core.logging.Logger
 import co.early.fore.retrofit.ErrorHandler
 import co.early.fore.retrofit.MessageProvider
 import com.google.gson.Gson

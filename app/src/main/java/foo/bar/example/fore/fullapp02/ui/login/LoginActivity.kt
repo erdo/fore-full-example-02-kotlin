@@ -7,7 +7,7 @@ import android.text.InputType
 import android.view.View
 import android.widget.ScrollView
 import android.widget.Toast
-import co.early.fore.core.logging.Logger
+import co.early.fore.kt.core.logging.Logger
 import co.early.fore.lifecycle.LifecycleSyncer
 import co.early.fore.lifecycle.activity.SyncActivityX
 import foo.bar.example.fore.fullapp02.R

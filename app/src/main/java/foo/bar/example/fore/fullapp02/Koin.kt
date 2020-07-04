@@ -1,11 +1,11 @@
 package foo.bar.example.fore.fullapp02
 
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.AndroidLogger
-import co.early.fore.core.logging.Logger
+import co.early.fore.kt.core.logging.AndroidLogger
+import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.kt.retrofit.CallProcessor
-import co.early.fore.retrofit.InterceptorLogging
+import co.early.fore.kt.retrofit.InterceptorLogging
 import foo.bar.example.fore.fullapp02.api.CustomGlobalErrorHandler
 import foo.bar.example.fore.fullapp02.api.CustomGlobalRequestInterceptor
 import foo.bar.example.fore.fullapp02.api.CustomRetrofitBuilder

@@ -6,7 +6,7 @@ import co.early.fore.adapters.UpdateSpec
 import co.early.fore.adapters.Updateable
 import co.early.fore.core.Affirm
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.Logger
+import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
 import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.kt.core.observer.ObservableImp

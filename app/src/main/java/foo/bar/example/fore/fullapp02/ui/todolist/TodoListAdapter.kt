@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import co.early.fore.adapters.ChangeAwareAdapter
-import co.early.fore.core.logging.Logger
+import co.early.fore.kt.core.logging.Logger
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.todolist.TodoListModel
 import kotlinx.android.synthetic.main.fragment_todolist_listitem.view.*
