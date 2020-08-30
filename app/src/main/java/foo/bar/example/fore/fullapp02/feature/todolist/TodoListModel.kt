@@ -1,14 +1,11 @@
 package foo.bar.example.fore.fullapp02.feature.todolist
 
-import co.early.fore.adapters.ChangeAwareArrayList
+import co.early.fore.kt.adapters.ChangeAwareArrayList
 import co.early.fore.adapters.ChangeAwareList
 import co.early.fore.adapters.UpdateSpec
 import co.early.fore.adapters.Updateable
 import co.early.fore.core.Affirm
-import co.early.fore.core.WorkMode
-import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
-import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.kt.core.observer.ObservableImp
 
 /**
@@ -20,27 +17,24 @@ import co.early.fore.kt.core.observer.ObservableImp
  * - we want nice easily animated list changes so we implement Updateable
  * - we also implement Iterable as this make it nice and easy when we come to export the data
  */
-class TodoListModel(systemTimeWrapper: SystemTimeWrapper, logger: Logger) :
-    Observable by ObservableImp(WorkMode.SYNCHRONOUS),
-    Updateable, Iterable<TodoItem> {
+class TodoListModel :
+    Observable by ObservableImp(),
+    Updateable, Iterable<TodoListModel.TodoItem> {
 
     //list of all items, including the ones that are done
-    private val todoList: MutableList<TodoItem>
+    private val todoList: MutableList<TodoItem> = mutableListOf()
+
     //only the list of items that are currently visible on the display
-    private val displayList: ChangeAwareList<TodoItem>
+    private val displayList: ChangeAwareList<TodoItem> = ChangeAwareArrayList()
     private var displayDoneItems = false
     private var itemsNotYetDone: Int = 0
 
     val size: Int
         get() = displayList.size
 
-    init {
-        this.todoList = ArrayList()
-        this.displayList = ChangeAwareArrayList(Affirm.notNull(systemTimeWrapper))
-    }
-
-    fun addItem(todoItem: TodoItem) {
-        todoList.add(Affirm.notNull(todoItem))
+    fun addItem(done: Boolean, description: String) {
+        val todoItem = TodoItem(done, description)
+        todoList.add(todoItem)
         if (displayDoneItems || !todoItem.isDone) {
             displayList.add(todoItem)
         }
@@ -70,7 +64,7 @@ class TodoListModel(systemTimeWrapper: SystemTimeWrapper, logger: Logger) :
 
             item.isDone = done
 
-            itemsNotYetDone = itemsNotYetDone + if (!done) 1 else -1
+            itemsNotYetDone += if (!done) 1 else -1
 
             if (displayDoneItems) {
                 displayList.makeAwareOfDataChange(index)
@@ -104,16 +98,15 @@ class TodoListModel(systemTimeWrapper: SystemTimeWrapper, logger: Logger) :
             this.displayDoneItems = displayDoneItems
 
             displayList.clear()
+            //Updatable can only handle animated changes in stages
+            //this is the first stage where we animate the displayList.clear() change
+            notifyObservers()
 
-            for (todoItem in todoList) {
-                if (displayDoneItems || !todoItem.isDone) {
-                    displayList.add(todoItem)
-                }
-            }
-
-            //this clears the updatespec so that the next one will be a full update
-            displayList.getAndClearLatestUpdateSpec(50)
-
+            displayList.addAll(
+                todoList.filter { item -> displayDoneItems || !item.isDone }
+            )
+            //Updatable can only handle animated changes in stages
+            //this is the second stage where we animate the displayList.addAll
             notifyObservers()
         }
     }
@@ -136,7 +129,7 @@ class TodoListModel(systemTimeWrapper: SystemTimeWrapper, logger: Logger) :
             private var currentIndex = 0
 
             override fun hasNext(): Boolean {
-                return currentIndex < todoList.size && todoList[currentIndex] != null
+                return currentIndex < todoList.size
             }
 
             override fun next(): TodoItem {
@@ -145,6 +138,14 @@ class TodoListModel(systemTimeWrapper: SystemTimeWrapper, logger: Logger) :
         }
     }
 
+    /**
+     * All changes to isDone should go via TodoListModel
+     */
+    class TodoItem(done: Boolean = false, val description: String) {
+        var isDone: Boolean internal set
+
+        init {
+            isDone = done
+        }
+    }
 }
-
-

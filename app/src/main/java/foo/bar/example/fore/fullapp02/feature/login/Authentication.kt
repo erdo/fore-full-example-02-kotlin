@@ -1,7 +1,6 @@
 package foo.bar.example.fore.fullapp02.feature.login
 
 import arrow.core.Either
-import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
 import co.early.fore.kt.core.callbacks.FailureWithPayload
@@ -21,9 +20,8 @@ import foo.bar.example.fore.fullapp02.message.UserMessage
 class Authentication(
     private val authenticationService: AuthenticationService,
     private val callProcessor: CallProcessor<UserMessage>,
-    private val workMode: WorkMode,
     private val logger: Logger
-) : Observable by ObservableImp(workMode) {
+) : Observable by ObservableImp() {
 
     var sessionToken = ""
         private set
@@ -38,7 +36,7 @@ class Authentication(
         failureWithPayload: FailureWithPayload<UserMessage>
     ) {
 
-        logger.i(TAG, "login()")
+        logger.i("login()")
 
 
         if (isBusy) {
@@ -50,7 +48,7 @@ class Authentication(
         notifyObservers()
 
 
-        launchMain(workMode) {
+        launchMain {
 
             // this is the network call, CallProcessor handles a lot of the complication
             // and lets us mock network calls during tests
@@ -78,7 +76,7 @@ class Authentication(
 
     fun logout() {
 
-        launchMain(workMode) {
+        launchMain {
 
             // this is the network call, CallProcessor handles a lot of the complication
             // and lets us mock network calls during tests
@@ -92,15 +90,13 @@ class Authentication(
 
             }
         }
-
         sessionToken = ""
         notifyObservers()
     }
 
-
     private fun complete() {
 
-        logger.i(TAG, "complete()")
+        logger.i("complete()")
 
         isBusy = false
         notifyObservers()
@@ -119,9 +115,4 @@ class Authentication(
     fun isPassword(passwordCandidate: String?): Boolean {
         return if (passwordCandidate == null) false else passwordCandidate.length > 0
     }
-
-    companion object {
-        private val TAG = Authentication::class.java.simpleName
-    }
-
 }

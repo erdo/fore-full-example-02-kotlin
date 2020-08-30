@@ -3,15 +3,13 @@ package foo.bar.example.fore.fullapp02.feature.fruitcollector
 
 import android.os.Build
 import arrow.core.Either
-import co.early.fore.adapters.ChangeAwareArrayList
+import co.early.fore.kt.adapters.ChangeAwareArrayList
 import co.early.fore.adapters.ChangeAwareList
 import co.early.fore.adapters.UpdateSpec
 import co.early.fore.adapters.Updateable
 import co.early.fore.core.Affirm
-import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
-import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.coroutine.launchMain
@@ -31,12 +29,10 @@ import java.util.*
 class FruitCollectorModel(
     private val fruitService: FruitService,
     private val callProcessor: CallProcessor<UserMessage>,
-    private val systemTimeWrapper: SystemTimeWrapper,
-    private val workMode: WorkMode,
     private val logger: Logger
-) : Observable by ObservableImp(workMode), Updateable {
+) : Observable by ObservableImp(), Updateable {
 
-    private val fruitList: ChangeAwareList<Fruit>
+    private val fruitList: ChangeAwareList<Fruit> = ChangeAwareArrayList()
 
     var totalFruitCount = 0
         private set
@@ -54,10 +50,6 @@ class FruitCollectorModel(
         get() = fruitList.size
 
 
-    init {
-        fruitList = ChangeAwareArrayList(systemTimeWrapper)
-    }
-
     /**
      * The code here looks a bit complicated with the Busy() class etc, that class is just there
      * because in this highly contrived example we have 3 identical network calls all doing the
@@ -70,7 +62,7 @@ class FruitCollectorModel(
         failureWithPayload: FailureWithPayload<UserMessage>
     ) {
 
-        logger.i(TAG, "fetchFruits() 1 includeCitrus:" + includeCitrusResults)
+        logger.i("fetchFruits() 1 includeCitrus:" + includeCitrusResults)
 
         Affirm.notNull(includeCitrusResults)
 
@@ -96,9 +88,7 @@ class FruitCollectorModel(
         failureWithPayload: FailureWithPayload<UserMessage>
     ) {
 
-        logger.i(TAG, "fetchFruits() 2 includeCitrus:" + includeCitrusResults)
-
-        Affirm.notNull(includeCitrusResults)
+        logger.i("fetchFruits() 2 includeCitrus:" + includeCitrusResults)
 
         fetchFruits(object : Busy {
             override var isBusy: Boolean
@@ -122,7 +112,7 @@ class FruitCollectorModel(
         failureWithPayload: FailureWithPayload<UserMessage>
     ) {
 
-        logger.i(TAG, "fetchFruits() 3 includeCitrus:" + includeCitrusResults)
+        logger.i("fetchFruits() 3 includeCitrus:" + includeCitrusResults)
 
         Affirm.notNull(includeCitrusResults)
 
@@ -143,7 +133,7 @@ class FruitCollectorModel(
         failureWithPayload: FailureWithPayload<UserMessage>
     ) {
 
-        logger.i(TAG, "fetchFruits()")
+        logger.i("fetchFruits()")
 
         if (busy.isBusy) {
             failureWithPayload(UserMessage.ERROR_BUSY)
@@ -153,7 +143,7 @@ class FruitCollectorModel(
         busy.isBusy = true
         notifyObservers()
 
-        launchMain(workMode) {
+        launchMain {
 
             // this is the network call, CallProcessor handles a lot of the complication
             // and lets us mock network calls during tests
@@ -224,7 +214,7 @@ class FruitCollectorModel(
 
     private fun complete(busy: Busy) {
 
-        logger.i(TAG, "complete()")
+        logger.i("complete()")
 
         busy.isBusy = false
         notifyObservers()
@@ -245,7 +235,7 @@ class FruitCollectorModel(
     }
 
     fun clearFruit() {
-        logger.i(TAG, "clearFruit()")
+        logger.i("clearFruit()")
         fruitList.clear()
         totalCitrusFruitCount = 0
         totalFruitCount = 0
@@ -271,9 +261,5 @@ class FruitCollectorModel(
 
     private interface Busy {
         var isBusy: Boolean
-    }
-
-    companion object {
-        private val TAG = FruitCollectorModel::class.java.simpleName
     }
 }

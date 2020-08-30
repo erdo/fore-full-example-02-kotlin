@@ -16,14 +16,12 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 
 
-class MainActivity : AppCompatActivity(), PermissionReceiver by permission {
+class MainActivity : AppCompatActivity(R.layout.activity_main), PermissionReceiver by permission {
 
     private val authentication: Authentication by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) {//set initial state of navigation
             findViewById<MainView>(R.id.container).setSelectedItemId(R.id.navigation_fruit)

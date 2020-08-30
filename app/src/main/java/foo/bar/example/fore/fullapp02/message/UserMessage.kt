@@ -51,5 +51,4 @@ enum class UserMessage constructor(val messageResId: Int) : Parcelable {
             return arrayOfNulls(size)
         }
     }
-
 }

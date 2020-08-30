@@ -1,8 +1,6 @@
 package foo.bar.example.fore.fullapp02.feature.basket
 
 import androidx.lifecycle.ViewModel
-import co.early.fore.core.WorkMode
-import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
 import co.early.fore.kt.core.observer.ObservableImp
 import java.util.*
@@ -24,8 +22,7 @@ import java.util.*
  * more robust because of this). See here for more info
  * (https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k)
  */
-class BasketModel(private val logger: Logger, workMode: WorkMode) : ViewModel(),
-    Observable by ObservableImp(workMode) {
+class BasketModel : ViewModel(), Observable by ObservableImp() {
 
     private val items = ArrayList<BasketItem>()
 

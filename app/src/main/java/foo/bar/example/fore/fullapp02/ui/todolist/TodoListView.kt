@@ -14,7 +14,6 @@ import co.early.fore.core.ui.SyncableView
 import co.early.fore.lifecycle.LifecycleSyncer
 import co.early.fore.lifecycle.view.SyncRelativeLayout
 import foo.bar.example.fore.fullapp02.feature.permission.Permission
-import foo.bar.example.fore.fullapp02.feature.todolist.TodoItem
 import foo.bar.example.fore.fullapp02.feature.todolist.TodoListModel
 import foo.bar.example.fore.fullapp02.ui.common.uiutils.SyncerTextWatcher
 import foo.bar.example.fore.fullapp02.ui.common.uiutils.inject
@@ -143,7 +142,7 @@ class TodoListView @JvmOverloads constructor(
 
     private fun addItem() {
         if (todo_create_button.isEnabled) {
-            todoListModel.addItem(TodoItem(false, todo_description_edit.text.toString()))
+            todoListModel.addItem(false, todo_description_edit.text.toString())
             todo_description_edit.setText("")
         }
     }

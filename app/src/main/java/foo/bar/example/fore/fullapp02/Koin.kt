@@ -54,9 +54,9 @@ val appModule = module(override = true) {
      * Features
      */
 
-    single { Authentication(get(), get(), get(), get()) }
-    single { FruitCollectorModel(get(), get(), get(), get(), get()) }
-    single { TodoListModel(get(), get()) }
+    single { Authentication(get(), get(), get()) }
+    single { FruitCollectorModel(get(), get(), get()) }
+    single { TodoListModel() }
 
 
     /**
@@ -71,7 +71,7 @@ val appModule = module(override = true) {
      * ViewModels
      */
 
-    viewModel { BasketModel(get(), WorkMode.SYNCHRONOUS) }
+    viewModel { BasketModel() }
 }
 
 

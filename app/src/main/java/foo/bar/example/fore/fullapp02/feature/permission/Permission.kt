@@ -106,7 +106,7 @@ class Permission(
      */
     override fun permissionsGranted(vararg permissionTypes: Type): Boolean {
 
-        logger.i(LOG_TAG, "permissionsGranted()")
+        logger.i("permissionsGranted()")
 
         var allGranted = true
 
@@ -115,10 +115,10 @@ class Permission(
                     app, permissionType.androidMagicString
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                logger.w(LOG_TAG, "$SPACER(NO)  $permissionType")
+                logger.w("$SPACER(NO)  $permissionType")
                 allGranted = false
             } else {
-                logger.i(LOG_TAG, "$SPACER(YES) $permissionType")
+                logger.i("$SPACER(YES) $permissionType")
             }
         }
 
@@ -147,7 +147,7 @@ class Permission(
         vararg permissionTypes: Type
     ) {
 
-        logger.i(LOG_TAG, "permissionRequest() for " + permissionTypes.size + " permissions")
+        logger.i("permissionRequest() for " + permissionTypes.size + " permissions")
 
         //check if the activity implements the correct interface
         require(activity is PermissionReceiver) {
@@ -162,7 +162,7 @@ class Permission(
         }
 
         permissionTypes.map {
-            logger.i(LOG_TAG, SPACER + "permission pending: " + it)
+            logger.i(SPACER + "permission pending: " + it)
         }
 
         pendingRequest = PendingRequest(
@@ -193,7 +193,6 @@ class Permission(
     ) {
 
         logger.i(
-            LOG_TAG,
             "reportPermissionResult() for " + permissions.size + " permissions" +
                     " reqCode:" + requestCode
         )
@@ -231,7 +230,6 @@ class Permission(
 
         for (result in grantResults) {
             logger.i(
-                LOG_TAG,
                 SPACER + "grant result:" + (result == PackageManager.PERMISSION_GRANTED)
             )
             if (result != PackageManager.PERMISSION_GRANTED) {
@@ -240,7 +238,7 @@ class Permission(
         }
 
         if (!allGranted) {
-            logger.w(LOG_TAG, "Some permissions were not granted")
+            logger.w("Some permissions were not granted")
         }
 
         return allGranted
@@ -257,6 +255,7 @@ class Permission(
     enum class Type constructor(val androidMagicString: String) {
 
         WRITE_EXTERNAL_STORAGE(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+
         //...add more permissions as we need them, don't forget to also put them in the manifest
         ACCESS_FINE_LOCATION(Manifest.permission.ACCESS_FINE_LOCATION)
     }
@@ -269,10 +268,9 @@ class Permission(
 
 
     companion object {
-
-        private val LOG_TAG = Permission::class.java.simpleName
         private const val SPACER = "-- "
         private const val REQUEST_CODE = 4242
+
         // If the permission gets denied this quick, then it implies that the user has selected the
         // "Never Ask Again" check box on the permissions request
         private const val AUTOMATICALLY_DENIED_WINDOW_MS: Long = 500
