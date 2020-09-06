@@ -87,7 +87,6 @@ class Authentication(
             when (result) {
                 is Either.Left -> {} //do nothing
                 is Either.Right -> {} //do nothing - but in reality, maybe warn user that they weren't properly logged out
-
             }
         }
         sessionToken = ""
