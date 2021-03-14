@@ -7,9 +7,10 @@ import android.text.InputType
 import android.view.View
 import android.widget.ScrollView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import co.early.fore.core.observer.Observer
+import co.early.fore.core.ui.SyncableView
 import co.early.fore.kt.core.logging.Logger
-import co.early.fore.lifecycle.LifecycleSyncer
-import co.early.fore.lifecycle.activity.SyncActivityX
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.login.Authentication
 import foo.bar.example.fore.fullapp02.ui.common.uiutils.SyncerCheckChanged
@@ -20,16 +21,14 @@ import kotlinx.android.synthetic.main.activity_login.*
 import org.koin.android.ext.android.inject
 
 
-/**
- * For the login example we manage fore observers at the **Activity** level
- * using: [SyncXActivity]
- */
-class LoginActivity : SyncActivityX() {
+class LoginActivity : AppCompatActivity(), SyncableView {
 
     //models we need
     private val authentication: Authentication by inject()
     private val logger: Logger by inject()
 
+    //single observer reference
+    var observer = Observer { syncView() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,6 +75,19 @@ class LoginActivity : SyncActivityX() {
 
     }
 
+    //reactive ui stuff below
+
+    override fun onStart() {
+        super.onStart()
+        authentication.addObserver(observer)
+        syncView() //  <- don't forget this
+    }
+
+    override fun onStop() {
+        super.onStop()
+        authentication.removeObserver(observer)
+    }
+
     override fun syncView() {
 
         logger.i(LOG_TAG, "syncView()")
@@ -95,10 +107,6 @@ class LoginActivity : SyncActivityX() {
         login_password_edittext.setSelection(login_password_edittext.text.length)
         login_email_edittext.isEnabled = !authentication.isBusy
         login_password_edittext.isEnabled = !authentication.isBusy
-    }
-
-    override fun getThingsToObserve(): LifecycleSyncer.Observables {
-        return LifecycleSyncer.Observables(authentication)
     }
 
     companion object {

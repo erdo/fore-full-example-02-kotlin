@@ -7,12 +7,12 @@ import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.view.inputmethod.InputMethodManager
+import android.widget.RelativeLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.ui.SyncableView
-import co.early.fore.lifecycle.LifecycleSyncer
-import co.early.fore.lifecycle.view.SyncRelativeLayout
 import foo.bar.example.fore.fullapp02.feature.permission.Permission
 import foo.bar.example.fore.fullapp02.feature.todolist.TodoListModel
 import foo.bar.example.fore.fullapp02.ui.common.uiutils.SyncerTextWatcher
@@ -30,13 +30,15 @@ class TodoListView @JvmOverloads constructor(
     context: Context?,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) :
-    SyncRelativeLayout(context, attrs, defStyleAttr), SyncableView {
+) : RelativeLayout(context, attrs, defStyleAttr), SyncableView {
 
     //models that we need
     private val todoListModel: TodoListModel by inject()
     private val logger: Logger by inject()
     private val permission: Permission by inject()
+
+    //single observer reference
+    var observer = Observer { syncView() }
 
     //ui bits
     private lateinit var todoListAdapter: TodoListAdapter
@@ -194,13 +196,19 @@ class TodoListView @JvmOverloads constructor(
     }
 
 
-    //data binding stuff below
+    //reactive ui stuff below
 
-    override fun getThingsToObserve(): LifecycleSyncer.Observables {
-        return LifecycleSyncer.Observables(
-            //todoListExporter,
-            todoListModel
-        )
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        todoListModel.addObserver(observer)
+       // todoListExporter.addObserver(observer)
+        syncView() //  <- don't forget this
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        todoListModel.removeObserver(observer)
+       // todoListExporter.removeObserver(observer)
     }
 
     override fun syncView() {

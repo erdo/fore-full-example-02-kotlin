@@ -1,11 +1,10 @@
 package foo.bar.example.fore.fullapp02.ui.basket
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import co.early.fore.lifecycle.LifecycleSyncer
-import co.early.fore.lifecycle.fragment.SyncFragmentX
+import androidx.fragment.app.Fragment
+import co.early.fore.core.observer.Observer
+import co.early.fore.core.ui.SyncableView
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.basket.BasketModel
 import foo.bar.example.fore.fullapp02.ui.common.widget.NotImplementedDialog
@@ -18,20 +17,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  * For the basket example we manage fore observers at the **Fragment** level
  * [BasketView]
  */
-class BasketFragment : SyncFragmentX() {
+class BasketFragment : Fragment(R.layout.fragment_basket), SyncableView {
 
     //models that we need to sync with
     private val basketModel: BasketModel by viewModel()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.fragment_basket, null)
-    }
-
+    //single observer reference
+    var observer = Observer { syncView() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,7 +50,18 @@ class BasketFragment : SyncFragmentX() {
     }
 
 
-    //data binding stuff below
+    //reactive ui stuff below
+
+    override fun onStart() {
+        super.onStart()
+        basketModel.addObserver(observer)
+        syncView() //  <- don't forget this
+    }
+
+    override fun onStop() {
+        super.onStop()
+        basketModel.removeObserver(observer)
+    }
 
     override fun syncView() {
         basket_items_txt.text = "" + basketModel.numberOfItems
@@ -67,12 +70,6 @@ class BasketFragment : SyncFragmentX() {
         basket_discount_text.text = MoneyFormatter.format(basketModel.totalDiscount)
         basket_discount_checkbox.isChecked = basketModel.isDiscount
         basket_checkout_button.isEnabled = basketModel.numberOfItems > 0
-    }
-
-    override fun getThingsToObserve(): LifecycleSyncer.Observables {
-        return LifecycleSyncer.Observables(
-            basketModel
-        )
     }
 
     companion object {

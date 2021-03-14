@@ -3,15 +3,14 @@ package foo.bar.example.fore.fullapp02.ui.fruitcollector
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import co.early.fore.core.observer.Observer
 import co.early.fore.core.ui.SyncTrigger
-import co.early.fore.lifecycle.LifecycleSyncer
-import co.early.fore.lifecycle.fragment.SyncFragmentX
+import co.early.fore.core.ui.SyncableView
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.fruitcollector.FruitCollectorModel
 import foo.bar.example.fore.fullapp02.message.UserMessage
@@ -24,27 +23,19 @@ import org.koin.android.ext.android.inject
  * For the basket example we manage fore observers at the **Fragment** level
  * using: [SyncXFragment]
  */
-class FruitCollectorFragment : SyncFragmentX() {
+class FruitCollectorFragment : Fragment(R.layout.fragment_fruitcollector), SyncableView {
 
     //models we need
     private val fruitCollectorModel: FruitCollectorModel by inject()
+
+    //single observer reference
+    var observer = Observer { syncView() }
 
     //other UI stuff
     private lateinit var fruitCollectorAdapter: FruitCollectorAdapter
     private lateinit var winAnimation: AnimatorSet
     private lateinit var fetchingStartedSyncTrigger: SyncTrigger
     private lateinit var fetchingStoppedSyncTrigger: SyncTrigger
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.fragment_fruitcollector, container, false)
-    }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -117,7 +108,7 @@ class FruitCollectorFragment : SyncFragmentX() {
         winAnimation = AnimatorSet()
         winAnimation.duration = 700
 
-        fetchingStartedSyncTrigger = SyncTrigger(SyncTrigger.DoThisWhenTriggered {
+        fetchingStartedSyncTrigger = SyncTrigger({
             winAnimation.playTogether(
                 ObjectAnimator.ofFloat(
                     fruit_fetchingfruitmessage_txt,
@@ -127,9 +118,9 @@ class FruitCollectorFragment : SyncFragmentX() {
                 )
             )
             winAnimation.start()
-        }, SyncTrigger.CheckTriggerThreshold { fruitCollectorModel.anyNetworkThreadsBusy() })
+        }, { fruitCollectorModel.anyNetworkThreadsBusy() })
 
-        fetchingStoppedSyncTrigger = SyncTrigger(SyncTrigger.DoThisWhenTriggered {
+        fetchingStoppedSyncTrigger = SyncTrigger({
             // temporarily make fetchingFruitMessage visible before we fade it, syncView() gets
             // called at the end of the animation anyway to put everything back to how it should be
             fruit_fetchingfruitmessage_txt.visibility = View.VISIBLE
@@ -143,12 +134,23 @@ class FruitCollectorFragment : SyncFragmentX() {
             )
             winAnimation.addListener(SyncerAnimationComplete(this))//onAnimationEnd() -> syncView()
             winAnimation.start()
-        }, SyncTrigger.CheckTriggerThreshold { !fruitCollectorModel.anyNetworkThreadsBusy() })
+        }, { !fruitCollectorModel.anyNetworkThreadsBusy() })
 
     }
 
 
-    //data binding stuff below
+    //reactive ui stuff below
+
+    override fun onStart() {
+        super.onStart()
+        fruitCollectorModel.addObserver(observer)
+        syncView() //  <- don't forget this
+    }
+
+    override fun onStop() {
+        super.onStop()
+        fruitCollectorModel.removeObserver(observer)
+    }
 
     override fun syncView() {
 
@@ -177,12 +179,6 @@ class FruitCollectorFragment : SyncFragmentX() {
         fetchingStoppedSyncTrigger.checkLazy()
 
         fruitCollectorAdapter.notifyDataSetChangedAuto()
-    }
-
-    override fun getThingsToObserve(): LifecycleSyncer.Observables {
-        return LifecycleSyncer.Observables(
-            fruitCollectorModel
-        )
     }
 
     companion object {

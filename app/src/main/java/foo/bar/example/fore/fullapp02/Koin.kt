@@ -4,8 +4,8 @@ import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.AndroidLogger
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.time.SystemTimeWrapper
-import co.early.fore.kt.retrofit.CallProcessor
-import co.early.fore.kt.retrofit.InterceptorLogging
+import co.early.fore.kt.net.InterceptorLogging
+import co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2
 import foo.bar.example.fore.fullapp02.api.CustomGlobalErrorHandler
 import foo.bar.example.fore.fullapp02.api.CustomGlobalRequestInterceptor
 import foo.bar.example.fore.fullapp02.api.CustomRetrofitBuilder
@@ -41,7 +41,7 @@ val appModule = module(override = true) {
         )//logging interceptor should be the last one
     }
 
-    single { CallProcessor(CustomGlobalErrorHandler(get()), get(), get()) }
+    single { CallProcessorRetrofit2(CustomGlobalErrorHandler(get()), get(), get()) }
 
     single { SystemTimeWrapper() }
 

@@ -2,9 +2,9 @@ package foo.bar.example.fore.fullapp02.ui.main
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.constraintlayout.widget.ConstraintLayout
+import co.early.fore.core.observer.Observer
 import co.early.fore.core.ui.SyncableView
-import co.early.fore.lifecycle.LifecycleSyncer
-import co.early.fore.lifecycle.view.SyncConstraintLayout
 import foo.bar.example.fore.fullapp02.feature.fruitcollector.FruitCollectorModel
 import foo.bar.example.fore.fullapp02.feature.todolist.TodoListModel
 import foo.bar.example.fore.fullapp02.ui.common.uiutils.inject
@@ -18,25 +18,31 @@ class MainView @JvmOverloads constructor(
     context: Context?,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) :
-    SyncConstraintLayout
-        (context, attrs, defStyleAttr), SyncableView {
+) : ConstraintLayout (context!!, attrs, defStyleAttr), SyncableView {
 
     private val todoListModel: TodoListModel by inject()
     private val fruitCollectorModel: FruitCollectorModel by inject()
 
+    //single observer reference
+    var observer = Observer { syncView() }
 
     internal fun setSelectedItemId(resId: Int) {
         navigationView.selectedItemId = resId
     }
 
-    override fun getThingsToObserve(): LifecycleSyncer.Observables {
-        return LifecycleSyncer.Observables(
-            fruitCollectorModel,
-            todoListModel
-            // note that we are not observing the basket model as it has been implemented
-            // as a locally scoped view model that doesn't exist when we are not on the basket view
-        )
+    //reactive ui stuff below
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        fruitCollectorModel.addObserver(observer)
+        todoListModel.addObserver(observer)
+        syncView() //  <- don't forget this
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        fruitCollectorModel.removeObserver(observer)
+        todoListModel.removeObserver(observer)
     }
 
     override fun syncView() {

@@ -1,16 +1,17 @@
 package foo.bar.example.fore.fullapp02.feature.login
 
-import arrow.core.Either
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
+import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.observer.ObservableImp
-import co.early.fore.kt.retrofit.CallProcessor
+import co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2
 import foo.bar.example.fore.fullapp02.api.authentication.AuthenticationService
 import foo.bar.example.fore.fullapp02.api.authentication.SessionRequestPojo
 import foo.bar.example.fore.fullapp02.message.UserMessage
+
 /**
  * All the unit testable logic and data for Authentication,
  * connects to the network via CallProcessor (which is mockable for unit tests)
@@ -19,7 +20,7 @@ import foo.bar.example.fore.fullapp02.message.UserMessage
  */
 class Authentication(
     private val authenticationService: AuthenticationService,
-    private val callProcessor: CallProcessor<UserMessage>,
+    private val callProcessor: CallProcessorRetrofit2<UserMessage>,
     private val logger: Logger
 ) : Observable by ObservableImp() {
 

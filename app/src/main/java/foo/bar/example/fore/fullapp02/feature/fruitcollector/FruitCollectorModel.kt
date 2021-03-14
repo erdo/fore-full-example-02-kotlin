@@ -2,19 +2,18 @@ package foo.bar.example.fore.fullapp02.feature.fruitcollector
 
 
 import android.os.Build
-import arrow.core.Either
 import co.early.fore.kt.adapters.ChangeAwareArrayList
 import co.early.fore.adapters.ChangeAwareList
 import co.early.fore.adapters.UpdateSpec
 import co.early.fore.adapters.Updateable
-import co.early.fore.core.Affirm
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
+import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.observer.ObservableImp
-import co.early.fore.kt.retrofit.CallProcessor
+import co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2
 import foo.bar.example.fore.fullapp02.api.fruits.FruitPojo
 import foo.bar.example.fore.fullapp02.api.fruits.FruitService
 import foo.bar.example.fore.fullapp02.message.UserMessage
@@ -28,7 +27,7 @@ import java.util.*
  */
 class FruitCollectorModel(
     private val fruitService: FruitService,
-    private val callProcessor: CallProcessor<UserMessage>,
+    private val callProcessor: CallProcessorRetrofit2<UserMessage>,
     private val logger: Logger
 ) : Observable by ObservableImp(), Updateable {
 
@@ -62,9 +61,7 @@ class FruitCollectorModel(
         failureWithPayload: FailureWithPayload<UserMessage>
     ) {
 
-        logger.i("fetchFruits() 1 includeCitrus:" + includeCitrusResults)
-
-        Affirm.notNull(includeCitrusResults)
+        logger.i("fetchFruits() 1 includeCitrus:$includeCitrusResults")
 
         fetchFruits(object : Busy {
             override var isBusy: Boolean
@@ -112,9 +109,7 @@ class FruitCollectorModel(
         failureWithPayload: FailureWithPayload<UserMessage>
     ) {
 
-        logger.i("fetchFruits() 3 includeCitrus:" + includeCitrusResults)
-
-        Affirm.notNull(includeCitrusResults)
+        logger.i("fetchFruits() 3 includeCitrus:$includeCitrusResults")
 
         fetchFruits(object : Busy {
             override var isBusy: Boolean
@@ -160,6 +155,7 @@ class FruitCollectorModel(
                     result.b
                 )
             }
+
         }
 
     }
