@@ -5,15 +5,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
-import co.early.fore.adapters.ChangeAwareAdapter
+import co.early.fore.adapters.Adaptable
+import co.early.fore.adapters.Notifyable
+import co.early.fore.kt.adapters.NotifyableImp
 import co.early.fore.kt.core.logging.Logger
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.todolist.TodoListModel
 import kotlinx.android.synthetic.main.fragment_todolist_listitem.view.*
 
 
-class TodoListAdapter(private val todoListModel: TodoListModel, val logger: Logger) :
-    ChangeAwareAdapter<TodoListAdapter.ViewHolder>(todoListModel) {
+class TodoListAdapter(
+    private val todoListModel: TodoListModel,
+    val logger: Logger,
+    private val notifyableImp: NotifyableImp<ViewHolder> = NotifyableImp(updateable = todoListModel)
+) :
+    RecyclerView.Adapter<TodoListAdapter.ViewHolder>(),
+    Notifyable<TodoListAdapter.ViewHolder> by notifyableImp,
+    Adaptable<TodoListModel.TodoItem> by todoListModel {
+
+    init {
+        notifyableImp.initializeAdapter(this)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -41,10 +53,5 @@ class TodoListAdapter(private val todoListModel: TodoListModel, val logger: Logg
         holder.itemView.todolist_description_text.text = "" + item.description
     }
 
-    override fun getItemCount(): Int {
-        return todoListModel.size
-    }
-
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
-
 }

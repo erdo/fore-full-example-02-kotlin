@@ -2,12 +2,13 @@ package foo.bar.example.fore.fullapp02.feature.fruitcollector
 
 
 import android.os.Build
-import co.early.fore.kt.adapters.ChangeAwareArrayList
-import co.early.fore.adapters.ChangeAwareList
-import co.early.fore.adapters.UpdateSpec
-import co.early.fore.adapters.Updateable
+import co.early.fore.adapters.Adaptable
+import co.early.fore.adapters.mutable.ChangeAwareList
+import co.early.fore.adapters.mutable.UpdateSpec
+import co.early.fore.adapters.mutable.Updateable
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
+import co.early.fore.kt.adapters.mutable.ChangeAwareArrayList
 import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
@@ -29,7 +30,7 @@ class FruitCollectorModel(
     private val fruitService: FruitService,
     private val callProcessor: CallProcessorRetrofit2<UserMessage>,
     private val logger: Logger
-) : Observable by ObservableImp(), Updateable {
+) : Observable by ObservableImp(), Updateable, Adaptable<Fruit> {
 
     private val fruitList: ChangeAwareList<Fruit> = ChangeAwareArrayList()
 
@@ -44,10 +45,6 @@ class FruitCollectorModel(
         private set
     var isBusy3 = false
         private set
-
-    val fruitListSize: Int
-        get() = fruitList.size
-
 
     /**
      * The code here looks a bit complicated with the Busy() class etc, that class is just there
@@ -221,7 +218,7 @@ class FruitCollectorModel(
     }
 
     fun removeFruit(index: Int) {
-        val fruitToRemove = getFruit(index)
+        val fruitToRemove = getItem(index)
 
         totalFruitCount--
         totalCitrusFruitCount -= if (fruitToRemove.isCitrus) 1 else 0
@@ -238,9 +235,13 @@ class FruitCollectorModel(
         notifyObservers()
     }
 
-    fun getFruit(index: Int): Fruit {
+    override fun getItem(index: Int): Fruit {
         checkIndex(index)
         return fruitList[index]
+    }
+
+    override fun getItemCount(): Int {
+        return fruitList.size
     }
 
     private fun checkIndex(index: Int) {

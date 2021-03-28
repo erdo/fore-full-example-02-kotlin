@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import co.early.fore.core.observer.Observer
-import co.early.fore.core.ui.SyncTrigger
 import co.early.fore.core.ui.SyncableView
+import co.early.fore.kt.core.ui.SyncTrigger
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.fruitcollector.FruitCollectorModel
 import foo.bar.example.fore.fullapp02.message.UserMessage
@@ -108,7 +108,7 @@ class FruitCollectorFragment : Fragment(R.layout.fragment_fruitcollector), Synca
         winAnimation = AnimatorSet()
         winAnimation.duration = 700
 
-        fetchingStartedSyncTrigger = SyncTrigger({
+        fetchingStartedSyncTrigger = SyncTrigger({ fruitCollectorModel.anyNetworkThreadsBusy() }) {
             winAnimation.playTogether(
                 ObjectAnimator.ofFloat(
                     fruit_fetchingfruitmessage_txt,
@@ -118,9 +118,9 @@ class FruitCollectorFragment : Fragment(R.layout.fragment_fruitcollector), Synca
                 )
             )
             winAnimation.start()
-        }, { fruitCollectorModel.anyNetworkThreadsBusy() })
+        }
 
-        fetchingStoppedSyncTrigger = SyncTrigger({
+        fetchingStoppedSyncTrigger = SyncTrigger({ !fruitCollectorModel.anyNetworkThreadsBusy() }) {
             // temporarily make fetchingFruitMessage visible before we fade it, syncView() gets
             // called at the end of the animation anyway to put everything back to how it should be
             fruit_fetchingfruitmessage_txt.visibility = View.VISIBLE
@@ -134,7 +134,7 @@ class FruitCollectorFragment : Fragment(R.layout.fragment_fruitcollector), Synca
             )
             winAnimation.addListener(SyncerAnimationComplete(this))//onAnimationEnd() -> syncView()
             winAnimation.start()
-        }, { !fruitCollectorModel.anyNetworkThreadsBusy() })
+        }
 
     }
 
@@ -168,7 +168,7 @@ class FruitCollectorFragment : Fragment(R.layout.fragment_fruitcollector), Synca
             if (fruitCollectorModel.isBusy3) View.VISIBLE else View.INVISIBLE
         fruit_fetchingfruitmessage_txt.visibility =
             if (fruitCollectorModel.anyNetworkThreadsBusy()) View.VISIBLE else View.INVISIBLE
-        fruit_clear_button.isEnabled = fruitCollectorModel.fruitListSize > 0
+        fruit_clear_button.isEnabled = fruitCollectorModel.itemCount > 0
         fruit_totalcount_txt.text = "" + fruitCollectorModel.totalFruitCount
         fruit_totalcitruscount_txt.text = "" + fruitCollectorModel.totalCitrusFruitCount
         fruit_citrus1_switch.isEnabled = !fruitCollectorModel.isBusy1

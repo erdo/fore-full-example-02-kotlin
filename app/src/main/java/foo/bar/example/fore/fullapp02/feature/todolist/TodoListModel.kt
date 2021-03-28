@@ -1,11 +1,12 @@
 package foo.bar.example.fore.fullapp02.feature.todolist
 
-import co.early.fore.kt.adapters.ChangeAwareArrayList
-import co.early.fore.adapters.ChangeAwareList
-import co.early.fore.adapters.UpdateSpec
-import co.early.fore.adapters.Updateable
+import co.early.fore.adapters.Adaptable
+import co.early.fore.adapters.mutable.ChangeAwareList
+import co.early.fore.adapters.mutable.UpdateSpec
+import co.early.fore.adapters.mutable.Updateable
 import co.early.fore.core.Affirm
 import co.early.fore.core.observer.Observable
+import co.early.fore.kt.adapters.mutable.ChangeAwareArrayList
 import co.early.fore.kt.core.observer.ObservableImp
 
 /**
@@ -19,7 +20,9 @@ import co.early.fore.kt.core.observer.ObservableImp
  */
 class TodoListModel :
     Observable by ObservableImp(),
-    Updateable, Iterable<TodoListModel.TodoItem> {
+    Updateable,
+    Iterable<TodoListModel.TodoItem>,
+    Adaptable<TodoListModel.TodoItem> {
 
     //list of all items, including the ones that are done
     private val todoList: MutableList<TodoItem> = mutableListOf()
@@ -28,9 +31,6 @@ class TodoListModel :
     private val displayList: ChangeAwareList<TodoItem> = ChangeAwareArrayList()
     private var displayDoneItems = false
     private var itemsNotYetDone: Int = 0
-
-    val size: Int
-        get() = displayList.size
 
     fun addItem(done: Boolean, description: String) {
         val todoItem = TodoItem(done, description)
@@ -51,10 +51,6 @@ class TodoListModel :
         itemsNotYetDone -= if (removedItem.isDone) 0 else 1
 
         notifyObservers()
-    }
-
-    fun getItem(index: Int): TodoItem {
-        return displayList[index]
     }
 
     fun setDone(done: Boolean, index: Int) {
@@ -117,6 +113,14 @@ class TodoListModel :
 
     fun isValidItemDescription(description: String?): Boolean {
         return if (description == null) false else description.length > 0
+    }
+
+    override fun getItem(index: Int): TodoItem {
+        return displayList[index]
+    }
+
+    override fun getItemCount(): Int {
+        return displayList.size
     }
 
     override fun getAndClearLatestUpdateSpec(maxAgeMs: Long): UpdateSpec {
