@@ -5,6 +5,8 @@
 
 A larger multi-page app written in Kotlin that demonstrates the use of the android fore library. The source includes details that are not present in the example apps bundled with the library, but would be necessary for a real app - one way of handling user messaging for example.
 
+**NB: I feel this sample is getting a bit long in the tooth, mainly because of the recent fashion for clean architecture apps arranged in modules rather than in packages. Clean architecture is a summary of ideas that most architectures aim for in any case - so you'll notice the package structure of this sample can be mapped quite easily to one that is more recognisably "Clean", this sample also separates the view layer (of course, because it's based on _fore_), it's highly testable etc. Anyway, it still all works, but I will most likely be publishing another sample shortly that is explicitly Clean and structured with kotlin modules. I'll update the main _fore_ docs once that is released.**
+
 There is a lot going on in the UI of this app, the point is to demonstrate how you can support complex UIs whilst still maintaining a tight and robust code base underneath.
 
 - Once you've logged in (with a fake email address and password, but the app still connects to an "authentication" server over the network), you are presented with three tabs.
