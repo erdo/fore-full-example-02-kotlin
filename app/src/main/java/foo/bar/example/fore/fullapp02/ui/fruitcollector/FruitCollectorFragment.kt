@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import co.early.fore.core.observer.Observer
 import co.early.fore.core.ui.SyncableView
-import co.early.fore.kt.core.ui.SyncTrigger
+import co.early.fore.kt.core.ui.synctrigger.SyncTrigger
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.fruitcollector.FruitCollectorModel
 import foo.bar.example.fore.fullapp02.message.UserMessage
