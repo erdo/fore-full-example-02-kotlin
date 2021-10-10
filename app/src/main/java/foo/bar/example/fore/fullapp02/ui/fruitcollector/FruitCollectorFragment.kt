@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import co.early.fore.core.observer.Observer
 import co.early.fore.core.ui.SyncableView
-import co.early.fore.kt.core.ui.synctrigger.SyncTrigger
+import co.early.fore.kt.core.ui.trigger.TriggerWhen
 import foo.bar.example.fore.fullapp02.R
 import foo.bar.example.fore.fullapp02.feature.fruitcollector.FruitCollectorModel
 import foo.bar.example.fore.fullapp02.message.UserMessage
@@ -34,8 +34,8 @@ class FruitCollectorFragment : Fragment(R.layout.fragment_fruitcollector), Synca
     //other UI stuff
     private lateinit var fruitCollectorAdapter: FruitCollectorAdapter
     private lateinit var winAnimation: AnimatorSet
-    private lateinit var fetchingStartedSyncTrigger: SyncTrigger
-    private lateinit var fetchingStoppedSyncTrigger: SyncTrigger
+    private lateinit var fetchingStartedSyncTrigger: TriggerWhen
+    private lateinit var fetchingStoppedSyncTrigger: TriggerWhen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -108,7 +108,7 @@ class FruitCollectorFragment : Fragment(R.layout.fragment_fruitcollector), Synca
         winAnimation = AnimatorSet()
         winAnimation.duration = 700
 
-        fetchingStartedSyncTrigger = SyncTrigger({ fruitCollectorModel.anyNetworkThreadsBusy() }) {
+        fetchingStartedSyncTrigger = TriggerWhen({ fruitCollectorModel.anyNetworkThreadsBusy() }) {
             winAnimation.playTogether(
                 ObjectAnimator.ofFloat(
                     fruit_fetchingfruitmessage_txt,
@@ -120,7 +120,7 @@ class FruitCollectorFragment : Fragment(R.layout.fragment_fruitcollector), Synca
             winAnimation.start()
         }
 
-        fetchingStoppedSyncTrigger = SyncTrigger({ !fruitCollectorModel.anyNetworkThreadsBusy() }) {
+        fetchingStoppedSyncTrigger = TriggerWhen({ !fruitCollectorModel.anyNetworkThreadsBusy() }) {
             // temporarily make fetchingFruitMessage visible before we fade it, syncView() gets
             // called at the end of the animation anyway to put everything back to how it should be
             fruit_fetchingfruitmessage_txt.visibility = View.VISIBLE
